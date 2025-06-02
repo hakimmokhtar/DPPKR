@@ -56,45 +56,41 @@ df_tapis = df[(df['Tahun'] == tahun_dipilih) & (df['BulanNum'] == bulan_dipilih_
 # --- Tajuk Seksyen ---
 st.markdown(f"## 📌 Jadual Aktiviti Bulan {bulan_dipilih_nama} {tahun_dipilih}")
 
-# --- Papar Data ---
-if df_tapis.empty:
-    st.info("❌ Tiada aktiviti pada bulan ini.")
-else:
-    # Peta nama hari dan bulan ke Bahasa Melayu
-    nama_hari = {
+# Salin dataframe dan reset index
+df_papar = df_tapis[['Tarikh', 'Aktiviti', 'Lajnah']].copy()
+df_papar.reset_index(drop=True, inplace=True)
+
+# Tambah Bil
+df_papar.insert(0, 'Bil', range(1, len(df_papar) + 1))
+
+# --- Format Tarikh ke Bahasa Melayu ---
+# Peta hari & bulan
+nama_hari = {
     'Monday': 'Isnin', 'Tuesday': 'Selasa', 'Wednesday': 'Rabu',
     'Thursday': 'Khamis', 'Friday': 'Jumaat', 'Saturday': 'Sabtu', 'Sunday': 'Ahad'
-    }
-
-    nama_bulan = {
+}
+nama_bulan = {
     'January': 'Januari', 'February': 'Februari', 'March': 'Mac', 'April': 'April',
     'May': 'Mei', 'June': 'Jun', 'July': 'Julai', 'August': 'Ogos',
     'September': 'September', 'October': 'Oktober', 'November': 'November', 'December': 'Disember'
-    }
+}
 
-# Pastikan kolum Tarikh masih jenis datetime
-df_papar['Hari'] = df_papar['Tarikh'].dt.day_name()
-df_papar['Hari'] = df_papar['Hari'].map(nama_hari)
-df_papar['Hari'] = df_papar['Hari'].fillna("Hari Tidak Sah")
+# Dapatkan nama hari & bulan dalam English dulu
+df_papar['HariEN'] = df_papar['Tarikh'].dt.day_name()
+df_papar['BulanEN'] = df_papar['Tarikh'].dt.strftime('%B')
 
-df_papar['HariDalamBulan'] = df_papar['Tarikh'].dt.day
-df_papar['Bulan'] = df_papar['Tarikh'].dt.strftime('%B')
-df_papar['Bulan'] = df_papar['Bulan'].map(nama_bulan)
+# Tukar ke Melayu
+df_papar['HariMY'] = df_papar['HariEN'].map(nama_hari)
+df_papar['BulanMY'] = df_papar['BulanEN'].map(nama_bulan)
 
-df_papar['Tahun'] = df_papar['Tarikh'].dt.year
-
-# Gabungkan jadi format yang diingini
+# Gabung semula tarikh dalam format Melayu
 df_papar['Tarikh'] = df_papar.apply(
-    lambda row: f"{row['Hari']}, {row['HariDalamBulan']:02d} {row['Bulan']} {row['Tahun']}",
+    lambda row: f"{row['HariMY']}, {row['Tarikh'].day:02d} {row['BulanMY']} {row['Tarikh'].year}",
     axis=1
 )
 
 # Buang kolum sementara
-df_papar.drop(columns=['Hari', 'HariDalamBulan', 'Bulan', 'Tahun'], inplace=True)
+df_papar.drop(columns=['HariEN', 'BulanEN', 'HariMY', 'BulanMY'], inplace=True)
 
-# Tambah kolum Bil bermula dari 1
-df_papar.reset_index(drop=True, inplace=True)
-df_papar.index += 1
-df_papar.index.name = 'Bil'
-
-st.dataframe(df_papar, use_container_width=True)
+# Paparkan dataframe
+st.dataframe(df_papar)
