@@ -47,12 +47,12 @@ df_tapis = df[(df['Tahun'] == tahun_dipilih) & (df['BulanNum'] == bulan_dipilih_
 # --- Tajuk Seksyen ---
 st.markdown(f"## 📌 Jadual Aktiviti Bulan {bulan_dipilih_nama} {tahun_dipilih}")
 
-# --- Sediakan Data Paparan ---
+# --- Sediakan Data untuk Paparan ---
 df_papar = df_tapis[['Tarikh', 'Aktiviti', 'Lajnah']].copy()
 df_papar.reset_index(drop=True, inplace=True)
 df_papar.insert(0, 'Bil', range(1, len(df_papar) + 1))
 
-# --- Format Tarikh ke Bahasa Melayu ---
+# --- Format Tarikh untuk Paparan dalam Bahasa Melayu ---
 nama_hari = {
     'Monday': 'Isnin', 'Tuesday': 'Selasa', 'Wednesday': 'Rabu',
     'Thursday': 'Khamis', 'Friday': 'Jumaat', 'Saturday': 'Sabtu', 'Sunday': 'Ahad'
@@ -62,18 +62,18 @@ nama_bulan = {
     'May': 'Mei', 'June': 'Jun', 'July': 'Julai', 'August': 'Ogos',
     'September': 'September', 'October': 'Oktober', 'November': 'November', 'December': 'Disember'
 }
+
 df_papar['HariEN'] = df_papar['Tarikh'].dt.day_name()
 df_papar['BulanEN'] = df_papar['Tarikh'].dt.strftime('%B')
 df_papar['HariMY'] = df_papar['HariEN'].map(nama_hari)
 df_papar['BulanMY'] = df_papar['BulanEN'].map(nama_bulan)
-df_papar['Tarikh'] = df_papar.apply(
+
+df_papar['TarikhFormat'] = df_papar.apply(
     lambda row: f"{row['HariMY']}, {row['Tarikh'].day:02d} {row['BulanMY']} {row['Tarikh'].year}",
     axis=1
 )
+
 df_papar.drop(columns=['HariEN', 'BulanEN', 'HariMY', 'BulanMY'], inplace=True)
 
 # --- Paparkan Data ---
-if df_papar.empty:
-    st.info("❌ Tiada aktiviti pada bulan ini.")
-else:
-    st.dataframe(df_papar)
+st.dataframe(df_papar[['Bil', 'TarikhFormat', 'Aktiviti', 'Lajnah']])
