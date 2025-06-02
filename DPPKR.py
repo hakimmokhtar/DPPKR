@@ -54,8 +54,8 @@ if df_tapis.empty:
     st.info("❌ Tiada aktiviti pada bulan ini.")
     
 else:
-    df_papar = df_tapis[['Tarikh', 'Aktiviti', 'Lajnah']].copy()
-    df_papar['Tarikh'] = df_papar['Tarikh'].dt.strftime('%A,%d %b %Y')
+    df_papar = df_tapis[['Tarikh', 'Aktiviti']].copy()
+    df_papar['Tarikh'] = df_papar['Tarikh'].dt.strftime('%d %b %Y')
 
     # Tambah kolum Bil bermula dari 1
     df_papar.reset_index(drop=True, inplace=True)
