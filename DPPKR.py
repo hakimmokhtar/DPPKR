@@ -19,9 +19,6 @@ df = load_data()
 # Tajuk Aplikasi
 st.title("📅 Takwim Tahunan")
 
-# Papar jadual penuh (jika mahu)
-st.dataframe(df[['Tarikh', 'Aktiviti']], use_container_width=True)
-
 # Dropdown Tahun
 tahun_list = sorted(df['Tahun'].unique(), reverse=True)
 tahun_dipilih = st.selectbox("Pilih Tahun", tahun_list)
