@@ -55,7 +55,7 @@ if df_tapis.empty:
     
 else:
     df_papar = df_tapis[['Tarikh', 'Aktiviti', 'Lajnah']].copy()
-    df_papar['Tarikh'] = df_papar['Tarikh'].import streamlit as st
+    df_papar['Tarikh'] = df_papar['Tarikh'].
 import pandas as pd
 import streamlit as st
 
