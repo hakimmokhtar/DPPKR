@@ -62,7 +62,7 @@ if df_tapis.empty:
 else:
     
     df_papar = df_tapis[['Tarikh', 'Aktiviti', 'Lajnah']].copy()
-    df_papar['Tarikh'] = df_papar['Tarikh'].dt.strftime('&A %d %b %Y')
+    df_papar['Tarikh'] = df_papar['Tarikh'].dt.strftime('&A, %d %b %Y')
 
     # Tambah kolum Bil bermula dari 1
     df_papar.reset_index(drop=True, inplace=True)
