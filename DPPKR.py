@@ -6,7 +6,7 @@ import streamlit as st
 st.image("LOGO DPPM.png", width=500)  # Boleh tukar ke URL logo sendiri
 
 # --- ✅ Tajuk Aplikasi ---
-st.title("📅 Takwim Dewan Pemuda PAS Kawasan Rembau")
+st.title("Takwim Dewan Pemuda PAS Kawasan Rembau")
 
 # --- ✅ Google Sheet URL ---
 sheet_url = "https://docs.google.com/spreadsheets/d/1qJmyiXVzcmzcfreSdDC1cV0Hr4iVsQcA99On-0NPOck/export?format=csv"
