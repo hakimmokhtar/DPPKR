@@ -58,9 +58,9 @@ else:
     df_papar['Tarikh'] = df_papar['Tarikh'].dt.strftime('%d %b %Y')
 
 # Tambah kolum Bil bermula dari 1
-df_papar.reset_index(drop=True, inplace=True)
-df_papar.index += 1
-df_papar.index.name = 'Bil'
+    df_papar.reset_index(drop=True, inplace=True)
+    df_papar.index += 1
+    df_papar.index.name = 'Bil'
 
 st.dataframe(df_papar, use_container_width=True)
 
