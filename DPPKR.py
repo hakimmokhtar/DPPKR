@@ -60,7 +60,37 @@ st.markdown(f"## 📌 Jadual Aktiviti Bulan {bulan_dipilih_nama} {tahun_dipilih}
 if df_tapis.empty:
     st.info("❌ Tiada aktiviti pada bulan ini.")
 else:
-    df_papar['Tarikh'] = df_papar['Tarikh'].dt.strftime('%A, %d %B %Y')
+    # Peta nama hari dan bulan ke Bahasa Melayu
+nama_hari = {
+    'Monday': 'Isnin', 'Tuesday': 'Selasa', 'Wednesday': 'Rabu',
+    'Thursday': 'Khamis', 'Friday': 'Jumaat', 'Saturday': 'Sabtu', 'Sunday': 'Ahad'
+}
+
+nama_bulan = {
+    'January': 'Januari', 'February': 'Februari', 'March': 'Mac', 'April': 'April',
+    'May': 'Mei', 'June': 'Jun', 'July': 'Julai', 'August': 'Ogos',
+    'September': 'September', 'October': 'Oktober', 'November': 'November', 'December': 'Disember'
+}
+
+# Pastikan kolum Tarikh masih jenis datetime
+df_papar['Hari'] = df_papar['Tarikh'].dt.day_name()
+df_papar['Hari'] = df_papar['Hari'].map(nama_hari)
+df_papar['Hari'] = df_papar['Hari'].fillna("Hari Tidak Sah")
+
+df_papar['HariDalamBulan'] = df_papar['Tarikh'].dt.day
+df_papar['Bulan'] = df_papar['Tarikh'].dt.strftime('%B')
+df_papar['Bulan'] = df_papar['Bulan'].map(nama_bulan)
+
+df_papar['Tahun'] = df_papar['Tarikh'].dt.year
+
+# Gabungkan jadi format yang diingini
+df_papar['Tarikh'] = df_papar.apply(
+    lambda row: f"{row['Hari']}, {row['HariDalamBulan']:02d} {row['Bulan']} {row['Tahun']}",
+    axis=1
+)
+
+# Buang kolum sementara
+df_papar.drop(columns=['Hari', 'HariDalamBulan', 'Bulan', 'Tahun'], inplace=True)
 
     # Tambah kolum Bil bermula dari 1
     df_papar.reset_index(drop=True, inplace=True)
