@@ -24,7 +24,7 @@ def load_data():
 df = load_data()
 
 # --- ✅ Dropdown Tahun ---
-tahun_list = sorted(df['Tahun'].unique(), reverse=True)
+tahun_list = sorted(set(df['Tahun'].unique()).union({2025, 2026, 2027}), reverse=True)
 tahun_dipilih = st.selectbox("Pilih Tahun", tahun_list)
 
 # --- ✅ Senarai Bulan Penuh (Jan - Dec) ---
