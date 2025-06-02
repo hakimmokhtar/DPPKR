@@ -3,7 +3,7 @@ import pandas as pd
 import streamlit as st
 
 # --- ✅ Logo ---
-st.image("LOGO DPPKR.jpeg", width=100)  # Boleh tukar ke URL logo sendiri
+st.image("LOGO DPPKR.jpeg", width=120)  # Boleh tukar ke URL logo sendiri
 
 # --- ✅ Tajuk Aplikasi ---
 st.title("📅 Takwim Dewan Pemuda PAS Kawasan Rembau")
