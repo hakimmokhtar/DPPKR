@@ -47,7 +47,7 @@ df['BulanNum'] = df['Tarikh'].dt.month  # pastikan kolum BulanNum ada
 df_tapis = df[(df['Tahun'] == tahun_dipilih) & (df['BulanNum'] == bulan_dipilih_num)]
 
 # Tajuk seksyen aktiviti
-st.markdown(f"## 📌 Jadual Aktiviti Bulan {bulan_dipilih} {tahun_dipilih}")
+st.markdown(f"## 📌 Jadual Aktiviti Bulan {bulan_dipilih_nama} {tahun_dipilih}")
 
 # Papar aktiviti sebagai jadual
 if df_tapis.empty:
