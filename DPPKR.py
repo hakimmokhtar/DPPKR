@@ -53,4 +53,4 @@ if df_tapis.empty:
     st.info("❌ Tiada aktiviti pada bulan ini.")
 else:
     for _, row in df_tapis.iterrows():
-        st.write(f"🗓️ **{row['Tarikh'].strftime('%d %b %Y')}**: {row['Aktiviti']}")
+        st.write(f"🗓️ **{row['Tarikh'].strftime('%d %b %Y')}**: {row['Aktiviti']} ({row['Lajnah']})")
