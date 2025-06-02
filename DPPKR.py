@@ -61,16 +61,16 @@ if df_tapis.empty:
     st.info("❌ Tiada aktiviti pada bulan ini.")
 else:
     # Peta nama hari dan bulan ke Bahasa Melayu
-nama_hari = {
+    nama_hari = {
     'Monday': 'Isnin', 'Tuesday': 'Selasa', 'Wednesday': 'Rabu',
     'Thursday': 'Khamis', 'Friday': 'Jumaat', 'Saturday': 'Sabtu', 'Sunday': 'Ahad'
-}
+    }
 
-nama_bulan = {
+    nama_bulan = {
     'January': 'Januari', 'February': 'Februari', 'March': 'Mac', 'April': 'April',
     'May': 'Mei', 'June': 'Jun', 'July': 'Julai', 'August': 'Ogos',
     'September': 'September', 'October': 'Oktober', 'November': 'November', 'December': 'Disember'
-}
+    }
 
 # Pastikan kolum Tarikh masih jenis datetime
 df_papar['Hari'] = df_papar['Tarikh'].dt.day_name()
