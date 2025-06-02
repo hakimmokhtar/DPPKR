@@ -6,7 +6,6 @@ sheet_id = "1qJmyiXVzcmzcfreSdDC1cV0Hr4iVsQcA99On-0NPOck"
 sheet_url = f"https://docs.google.com/spreadsheets/d/1qJmyiXVzcmzcfreSdDC1cV0Hr4iVsQcA99On-0NPOck/export?format=csv"
 
 # Baca data
-@st.cache_data
 def load_data():
     df = pd.read_csv(sheet_url)
     df['Tarikh'] = pd.to_datetime(df['Tarikh'])
