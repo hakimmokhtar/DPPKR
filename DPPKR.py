@@ -17,7 +17,7 @@ def load_data():
 df = load_data()
 
 # Tajuk Aplikasi
-st.title("📅 Takwim Tahunan")
+st.title("📅 Takwim Dewan Pemuda PAS Kawasan Rembau")
 
 # Dropdown Tahun
 tahun_list = sorted(df['Tahun'].unique(), reverse=True)
