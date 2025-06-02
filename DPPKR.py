@@ -1,17 +1,11 @@
 import streamlit as st
 import pandas as pd
 
-# Google Sheet URL
+st.set_page_config(page_title="Takwim PASTI", layout="centered")
+
+# ✅ Gantikan dengan ID sebenar Google Sheet anda
 sheet_id = "1qJmyiXVzcmzcfreSdDC1cV0Hr4iVsQcA99On-0NPOck"
 sheet_url = f"https://docs.google.com/spreadsheets/d/1qJmyiXVzcmzcfreSdDC1cV0Hr4iVsQcA99On-0NPOck/export?format=csv"
-
-
-# Baca data
-@st.cache_data
-def load_data():
-    df = pd.read_csv(sheet_url)
-    df['Tarikh'] = pd.to_datetime(df['Tarikh'])
-    return df.sort_values('Tarikh')
 
 @st.cache_data
 def load_data():
@@ -24,16 +18,14 @@ def load_data():
     # ✅ Susun ikut tarikh naik
     return df.sort_values('Tarikh')
 
-# Tajuk Aplikasi
-st.title("📅 Takwim Tahunan")
+# ✅ Paparkan header app
+st.title("📅 Takwim PASTI Rembau")
+st.markdown("Senarai aktiviti sepanjang tahun yang diambil dari Google Sheet.")
 
-# Papar jadual
-st.dataframe(df, use_container_width=True)
-
-# Papar kalendar ringkas
-st.markdown("## Aktiviti Tahun Ini")
-for index, row in df.iterrows():
-    st.write(f"📌 **{row['Tarikh'].strftime('%d %b %Y')}**: {row['Aktiviti']}")
-
-
-
+# ✅ Load dan papar data
+try:
+    df = load_data()
+    st.dataframe(df, use_container_width=True)
+except Exception as e:
+    st.error("❌ Gagal memuatkan data. Sila semak ID Google Sheet dan struktur fail.")
+    st.exception(e)
