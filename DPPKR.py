@@ -46,12 +46,13 @@ bulan_dipilih_num = bulan_nombor_list[bulan_dipilih_index]
 df['BulanNum'] = df['Tarikh'].dt.month  # pastikan kolum BulanNum ada
 df_tapis = df[(df['Tahun'] == tahun_dipilih) & (df['BulanNum'] == bulan_dipilih_num)]
 
-# --- Papar aktiviti termasuk lajnah ---
-st.markdown(f"## 📌 Aktiviti Bulan {bulan_dipilih} {tahun_dipilih}")
+# Tajuk seksyen aktiviti
+st.markdown(f"## 📌 Jadual Aktiviti Bulan {bulan_dipilih} {tahun_dipilih}")
 
+# Papar aktiviti sebagai jadual
 if df_tapis.empty:
     st.info("❌ Tiada aktiviti pada bulan ini.")
 else:
-    for _, row in df_tapis.iterrows():
-        st.write(f"🗓️ **{row['Tarikh'].strftime('%d %b %Y')}**: {row['Aktiviti']} ({row['Lajnah']})")
-
+    df_papar = df_tapis[['Tarikh', 'Aktiviti', 'Lajnah']].copy()
+    df_papar['Tarikh'] = df_papar['Tarikh'].dt.strftime('%d %b %Y')  # Format tarikh
+    st.dataframe(df_papar, use_container_width=True)
