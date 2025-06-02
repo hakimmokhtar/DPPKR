@@ -92,9 +92,9 @@ df_papar['Tarikh'] = df_papar.apply(
 # Buang kolum sementara
 df_papar.drop(columns=['Hari', 'HariDalamBulan', 'Bulan', 'Tahun'], inplace=True)
 
-    # Tambah kolum Bil bermula dari 1
-    df_papar.reset_index(drop=True, inplace=True)
-    df_papar.index += 1
-    df_papar.index.name = 'Bil'
+# Tambah kolum Bil bermula dari 1
+df_papar.reset_index(drop=True, inplace=True)
+df_papar.index += 1
+df_papar.index.name = 'Bil'
 
-    st.dataframe(df_papar, use_container_width=True)
+st.dataframe(df_papar, use_container_width=True)
