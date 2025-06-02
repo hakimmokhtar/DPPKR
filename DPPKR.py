@@ -1,40 +1,31 @@
 import streamlit as st
 import pandas as pd
 
-# URL Google Sheet CSV
+st.set_page_config(page_title="Takwim PASTI", layout="centered")
+
+# ✅ Gantikan dengan ID sebenar Google Sheet anda
+sheet_id = "1qJmyiXVzcmzcfreSdDC1cV0Hr4iVsQcA99On-0NPOck"
 sheet_url = "https://docs.google.com/spreadsheets/d/1qJmyiXVzcmzcfreSdDC1cV0Hr4iVsQcA99On-0NPOck/export?format=csv"
 
-# Baca dan proses data
 @st.cache_data
 def load_data():
-    df = pd.read_csv(sheet_url)
-    df.columns = df.columns.str.strip()  # Bersih nama kolum
+    # ✅ header=1 sebab baris pertama kosong atau bukan tajuk
+    df = pd.read_csv(sheet_url, header=1)
+
+    # ✅ Ubah ke format datetime & pastikan day dulu (dd/mm/yyyy)
     df['Tarikh'] = pd.to_datetime(df['Tarikh'], dayfirst=True)
-    df['Tahun'] = df['Tarikh'].dt.year
-    df['Bulan'] = df['Tarikh'].dt.strftime('%B')  # Contoh: "January"
-    df['BulanNum'] = df['Tarikh'].dt.month        # Untuk sort bulan
-    return df
 
-df = load_data()
+    # ✅ Susun ikut tarikh naik
+    return df.sort_values('Tarikh')
 
-# Tajuk Aplikasi
+# ✅ Paparkan header app
 st.title("📅 Takwim PASTI Rembau")
+st.markdown("Senarai aktiviti sepanjang tahun yang diambil dari Google Sheet.")
 
-# Pilih Tahun
-tahun_list = sorted(df['Tahun'].unique(), reverse=True)
-tahun_dipilih = st.selectbox("Pilih Tahun", tahun_list)
-
-# Pilih Bulan (ikut tahun dipilih)
-bulan_list = df[df['Tahun'] == tahun_dipilih].sort_values('BulanNum')['Bulan'].unique()
-bulan_dipilih = st.selectbox("Pilih Bulan", bulan_list)
-
-# Tapis ikut pilihan
-df_tapis = df[(df['Tahun'] == tahun_dipilih) & (df['Bulan'] == bulan_dipilih)]
-
-# Papar hasil
-st.markdown(f"### 📌 Aktiviti Bulan {bulan_dipilih} {tahun_dipilih}")
-if df_tapis.empty:
-    st.info("Tiada aktiviti pada bulan ini.")
-else:
-    for _, row in df_tapis.iterrows():
-        st.write(f"🗓️ **{row['Tarikh'].strftime('%d %b %Y')}**: {row['Aktiviti']}")
+# ✅ Load dan papar data
+try:
+    df = load_data()
+    st.dataframe(df, use_container_width=True)
+except Exception as e:
+    st.error("❌ Gagal memuatkan data. Sila semak ID Google Sheet dan struktur fail.")
+    st.exception(e)
