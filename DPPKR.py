@@ -62,4 +62,7 @@ if df_tapis.empty:
 else:
     df_papar = df_tapis[['Tarikh', 'Aktiviti', 'Lajnah']].copy()
     df_papar['Tarikh'] = df_papar['Tarikh'].dt.strftime('%A, %d %B %Y')
-    st.dataframe(df_papar.reset_index(drop=True))
+    df_papar.reset_index(drop=True, inplace=True)
+    df_papar.insert(0, 'Bil', range(1, len(df_papar) + 1))  # Tambah kolum 'Bil' di depan
+
+    st.dataframe(df_papar)
