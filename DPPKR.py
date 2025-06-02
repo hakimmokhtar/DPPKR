@@ -15,16 +15,9 @@ sheet_url = "https://docs.google.com/spreadsheets/d/1qJmyiXVzcmzcfreSdDC1cV0Hr4i
 def load_data():
     df = pd.read_csv(sheet_url)
     df.columns = df.columns.str.strip()
-    
-    
+        
     # Tukar tarikh dengan errors='coerce' supaya tak valid jadi NaT
     df['Tarikh'] = pd.to_datetime(df['Tarikh'], dayfirst=True, errors='coerce')
-    
-    # Debug: Tunjuk baris yang ada NaT di kolum Tarikh (iaitu tarikh tak boleh convert)
-    tarikh_tak_valid = df[df['Tarikh'].isna()]
-    if not tarikh_tak_valid.empty:
-        st.warning("Berikut baris dengan nilai Tarikh yang tidak sah (akan dibuang):")
-        st.write(tarikh_tak_valid)
     
     # Buang baris tanpa tarikh valid
     df = df.dropna(subset=['Tarikh'])
