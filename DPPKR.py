@@ -11,7 +11,7 @@ st.title("Takwim Dewan Pemuda PAS Kawasan Rembau")
 sheet_url = "https://docs.google.com/spreadsheets/d/1qJmyiXVzcmzcfreSdDC1cV0Hr4iVsQcA99On-0NPOck/export?format=csv"
 
 # --- Fungsi Baca Data dengan Debugging ---
-@st.cache_data
+
 def load_data():
     df = pd.read_csv(sheet_url)
     df.columns = df.columns.str.strip()
