@@ -49,10 +49,9 @@ df_tapis = df[(df['Tahun'] == tahun_dipilih) & (df['BulanNum'] == bulan_dipilih_
 # Tajuk seksyen aktiviti
 st.markdown(f"## 📌 Aktiviti Bulan {bulan_dipilih} {tahun_dipilih}")
 
-# Papar aktiviti sebagai jadual
+# Papar aktiviti
 if df_tapis.empty:
     st.info("❌ Tiada aktiviti pada bulan ini.")
 else:
-    df_papar = df_tapis[['Tarikh', 'Aktiviti', 'Lajnah']].copy()
-    df_papar['Tarikh'] = df_papar['Tarikh'].dt.strftime('%d %b %Y')  # Format tarikh
-    st.dataframe(df_papar, use_container_width=True)
+    for _, row in df_tapis.iterrows():
+        st.write(f"🗓️ **{row['Tarikh'].strftime('%d %b %Y')}**: {row['Aktiviti']} ({row['Lajnah']})")
