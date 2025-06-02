@@ -60,25 +60,9 @@ st.markdown(f"## 📌 Jadual Aktiviti Bulan {bulan_dipilih_nama} {tahun_dipilih}
 if df_tapis.empty:
     st.info("❌ Tiada aktiviti pada bulan ini.")
 else:
-    
-    df_papar = df_tapis[['Tarikh', 'Aktiviti', 'Lajnah']].copy()
-   # Peta nama hari dan bulan ke Bahasa Melayu
-    nama_hari = {
-    'Monday': 'Isnin', 'Tuesday': 'Selasa', 'Wednesday': 'Rabu',
-    'Thursday': 'Khamis', 'Friday': 'Jumaat', 'Saturday': 'Sabtu', 'Sunday': 'Ahad'
-    }
+    df_papar['Tarikh'] = df_papar['Tarikh'].dt.strftime('%A, %d %B %Y')
 
-    nama_bulan = {
-    'January': 'Januari', 'February': 'Februari', 'March': 'Mac', 'April': 'April',
-    'May': 'Mei', 'June': 'Jun', 'July': 'Julai', 'August': 'Ogos',
-    'September': 'September', 'October': 'Oktober', 'November': 'November', 'December': 'Disember'
-    }
-
-# Tukar ke format Bahasa Melayu
-df_papar['Tarikh'] = df_papar['Tarikh'].dt.strftime('%A|%d|%B|%Y')
-df_papar['Tarikh'] = df_papar['Tarikh'].apply(lambda x: f"{nama_hari[x.split('|')[0]]}, {x.split('|')[1]} {nama_bulan[x.split('|')[2]]} {x.split('|')[3]}")
-
-    # Tambah kolum Bil bermula dari 1
+# Tambah kolum Bil bermula dari 1
 df_papar.reset_index(drop=True, inplace=True)
 df_papar.index += 1
 df_papar.index.name = 'Bil'
