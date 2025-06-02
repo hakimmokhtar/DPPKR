@@ -16,9 +16,6 @@ def load_data():
     df = pd.read_csv(sheet_url)
     df.columns = df.columns.str.strip()
     
-    # Debug: Tunjuk 10 baris pertama asal tarikh
-    st.write("Contoh nilai Tarikh (asal):")
-    st.write(df['Tarikh'].head(10))
     
     # Tukar tarikh dengan errors='coerce' supaya tak valid jadi NaT
     df['Tarikh'] = pd.to_datetime(df['Tarikh'], dayfirst=True, errors='coerce')
