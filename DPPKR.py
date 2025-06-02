@@ -52,8 +52,9 @@ st.markdown(f"## 📌 Jadual Aktiviti Bulan {bulan_dipilih_nama} {tahun_dipilih}
 # Papar aktiviti sebagai jadual
 if df_tapis.empty:
     st.info("❌ Tiada aktiviti pada bulan ini.")
+    
 else:
-df_papar = df_tapis[['Tarikh', 'Aktiviti', 'Lajnah']].copy()
+    df_papar = df_tapis[['Tarikh', 'Aktiviti', 'Lajnah']].copy()
 df_papar['Tarikh'] = df_papar['Tarikh'].dt.strftime('%d %b %Y')
 
 # Tambah kolum Bil bermula dari 1
