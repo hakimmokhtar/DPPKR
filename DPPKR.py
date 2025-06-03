@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import datetime
 
 # --- ✅ Background Hijau PAS ---
 st.markdown(
@@ -77,7 +78,7 @@ else:
     st.dataframe(df_papar, use_container_width=True)
     
 # --- Program Akan Datang ---
-import datetime
+
 tarikh_hari_ini = datetime.date.today()
 
 df_akan_datang = df[df['Tarikh'].dt.date > tarikh_hari_ini]
