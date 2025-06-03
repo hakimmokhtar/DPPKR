@@ -100,7 +100,7 @@ else:
 footer_style = """
     <style>
     .footer {
-        background-color: #006400;  /* hijau gelap */
+        background-color: #007A33;  /* hijau gelap */
         color: white;
         padding: 15px 10px;
         text-align: center;
