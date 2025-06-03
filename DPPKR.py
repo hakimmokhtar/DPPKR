@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import datetime
 import streamlit as st
-
+import streamlit as st
 
 
 # --- ✅ Background Hijau PAS ---
@@ -61,6 +61,29 @@ bulan_dipilih_num = bulan_nombor_list[bulan_dipilih_index]
 # --- ✅ Tapis Data Ikut Pilihan Tahun dan Bulan ---
 df['BulanNum'] = df['Tarikh'].dt.month  # pastikan kolum BulanNum ada
 df_tapis = df[(df['Tahun'] == tahun_dipilih) & (df['BulanNum'] == bulan_dipilih_num)]
+
+st.markdown("""
+    <style>
+    /* Warna label selectbox */
+    label, .stSelectbox label {
+        color: white !important;
+        font-weight: bold;
+    }
+
+    /* Tukar warna teks dalam kotak selectbox */
+    .stSelectbox div[role="combobox"] {
+        color: white !important;
+        background-color: #006e3c !important;
+        border-radius: 5px;
+    }
+
+    /* Tukar warna teks dalam dropdown yang muncul */
+    .css-1n76uvr, .css-1d391kg {
+        color: black;  /* warna pilihan dalam dropdown */
+        background-color: white;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
 # Tajuk seksyen aktiviti
 st.markdown(f"## 📌 Jadual Aktiviti Bulan {bulan_dipilih_nama} {tahun_dipilih}")
