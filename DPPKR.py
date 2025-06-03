@@ -123,7 +123,7 @@ footer_style = """
         background-color: #006e3c;  /* hijau gelap */
         color: white;
         padding: 15px 10px;
-        text-align: left;
+        text-align: center;
         font-size: 0.9rem;
         margin-top: 30px;
         border-radius: 5px;
