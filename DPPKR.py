@@ -124,7 +124,7 @@ footer_html = """
     <b>DISEDIAKAN OLEH JABATAN SETIAUSAHA DPPKR 25-27</b><br>
     <span>&#128231;</span> <a href="mailto:setiausaha@dppkr.my">setiausaha@dppkr.my</a> |
     <span>&#128279;</span> <a href="https://facebook.com/pemudapasrembau" target="_blank">Facebook </a><br>
-    <span>&#128222;</span> SU : <a href="tel:HAKIM">+6013634323</a> |
+    <span>&#128222;</span> SU : <a href="tel:+60136343231">HAKIM</a> |
     <span>&#128172;</span> <a href="https://wa.me/60136343231" target="_blank">WhatsApp</a><br>
     <span>&#128222;</span> PSU 1: <a href="tel:NAIM">+60173607925</a> |
     <span>&#128172;</span> <a href="https://wa.me/60173607925" target="_blank">WhatsApp</a>
