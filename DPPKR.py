@@ -214,3 +214,19 @@ footer_html = """
 """
 
 st.markdown(footer_style + footer_html, unsafe_allow_html=True)
+
+st.markdown("""
+    <style>
+    /* Tukar teks dalam st.metric() jadi putih */
+    .element-container .stMetric label, .element-container .stMetric div {
+        color: white !important;
+    }
+
+    /* Optional: tukar warna background metric card */
+    .stMetric {
+        background-color: #004d2a;
+        padding: 10px;
+        border-radius: 10px;
+    }
+    </style>
+""", unsafe_allow_html=True)
