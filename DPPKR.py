@@ -75,3 +75,12 @@ else:
     df_papar.index.name = 'Bil'
 
     st.dataframe(df_papar, use_container_width=True)
+
+# --- Nota Bawah ---
+st.markdown(
+    "<hr style='border: 1px solid #ccc;'>"
+    "<p style='text-align:center; color:gray; font-size:14px;'>"
+    "<em>DISEDIAKAN OLEH JABATAN SETIAUSAHA DPPKR 25-27</em>"
+    "</p>",
+    unsafe_allow_html=True
+)
