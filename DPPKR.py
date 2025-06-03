@@ -90,7 +90,7 @@ jumlah_program_selesai = len(df[df['Tarikh'].dt.date < datetime.date.today()])
 
 # --- ✅ Statistik Paparan ---
 
-col1, col2, col3, col4 = st.columns(5)
+col1, col2, col3, col4, col5 = st.columns(5)
 col1.metric("Jumlah Program", jumlah_program)
 col2.metric("Program Hari Ini", jumlah_program_hari_ini)
 col3.metric("Akan Datang", jumlah_program_akan_datang)
