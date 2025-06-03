@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import datetime
-from streamlit_calendar import calendar
+import calendar
 
 # --- ✅ Background Hijau PAS ---
 st.markdown(
