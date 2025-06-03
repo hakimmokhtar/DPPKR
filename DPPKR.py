@@ -104,10 +104,10 @@ st.markdown(
     "<em>**DISEDIAKAN OLEH JABATAN SETIAUSAHA DPPKR 25-27</em>"
     "</p>",
     unsafe_allow_html=True,
-     <a href="mailto:setiausaha@dppkr.my">setiausaha@dppkr.my</a> |
-     <a href="https://www.facebook.com/DPPKR" target="_blank">Facebook DPPKR</a> <br>
+    "<a href="mailto:setiausaha@dppkr.my">setiausaha@dppkr.my</a> |
+    "<a href="https://www.facebook.com/DPPKR" target="_blank">Facebook DPPKR</a> <br>
     SU 1: <a href="tel:+60123456789">+60 12-345 6789</a> | 
-     <a href="https://wa.me/60123456789" target="_blank">WhatsApp</a> <br>
+    "<a href="https://wa.me/60123456789" target="_blank">WhatsApp</a> <br>
     SU 2: <a href="tel:+60198765432">+60 19-876 5432</a> | 
-     <a href="https://wa.me/60198765432" target="_blank">WhatsApp</a>
+    "<a href="https://wa.me/60198765432" target="_blank">WhatsApp</a>
 )
