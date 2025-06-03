@@ -62,9 +62,12 @@ sheet_url = "https://docs.google.com/spreadsheets/d/1qJmyiXVzcmzcfreSdDC1cV0Hr4i
 
 # --- ✅ Fungsi Baca Data ---
 def load_data():
+
     df = pd.read_csv(sheet_url)
-    df.columns = df.columns.str.strip()  # Bersih nama kolum
-    df['Tarikh'] = pd.to_datetime(df['Tarikh'], dayfirst=True)
+    df.columns = df.columns.str.strip()
+    df = df.dropna(subset=['Tarikh'])  # Buang baris tanpa tarikh
+    df['Tarikh'] = pd.to_datetime(df['Tarikh'], dayfirst=True, errors='coerce')  # Coerce tarikh salah jadi NaT
+    df = df.dropna(subset=['Tarikh'])  # Buang baris tarikh salah (NaT)
     df['Tahun'] = df['Tarikh'].dt.year
     df['Bulan'] = df['Tarikh'].dt.strftime('%B')
     df['BulanNum'] = df['Tarikh'].dt.month
