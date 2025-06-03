@@ -15,7 +15,7 @@ st.markdown(
 )
 
 # --- ✅ Logo ---
-st.image("LOGO DPPM.png", width=500)  # Boleh tukar ke URL logo sendiri
+st.image("LOGO DPPM.png", width=700)  # Boleh tukar ke URL logo sendiri
 
 # --- ✅ Tajuk Aplikasi ---
 st.title("Takwim Dewan Pemuda PAS Kawasan Rembau")
