@@ -18,7 +18,7 @@ st.markdown(
 st.image("LOGO DPPM.png", width=700)  # Boleh tukar ke URL logo sendiri
 
 # --- ✅ Tajuk Aplikasi ---
-st.title("Takwim Dewan Pemuda PAS Kawasan Rembau")
+st.title("Takwim DPPKR 2025-2027")
 
 # --- ✅ Google Sheet URL ---
 sheet_url = "https://docs.google.com/spreadsheets/d/1qJmyiXVzcmzcfreSdDC1cV0Hr4iVsQcA99On-0NPOck/export?format=csv"
