@@ -126,7 +126,7 @@ footer_html = """
     <span>&#128279;</span> <a href="https://facebook.com/pemudapasrembau" target="_blank">Facebook </a><br>
     <span>&#128222;</span> SU : <a href="tel:+60136343231">HAKIM</a> |
     <span>&#128172;</span> <a href="https://wa.me/60136343231" target="_blank">WhatsApp</a><br>
-    <span>&#128222;</span> PSU 1: <a href="tel:NAIM">+60173607925</a> |
+    <span>&#128222;</span> PSU 1: <a href="tel:+60173607925">NAIM</a> |
     <span>&#128172;</span> <a href="https://wa.me/60173607925" target="_blank">WhatsApp</a>
 </div>
 """
