@@ -75,6 +75,26 @@ else:
     df_papar.index.name = 'Bil'
 
     st.dataframe(df_papar, use_container_width=True)
+    
+# --- Program Akan Datang ---
+import datetime
+tarikh_hari_ini = datetime.date.today()
+
+df_akan_datang = df[df['Tarikh'].dt.date > tarikh_hari_ini]
+
+st.markdown("## 📅 Program Akan Datang")
+
+if df_akan_datang.empty:
+    st.info("❌ Tiada program akan datang setakat ini.")
+else:
+    df_prog_akan_datang = df_akan_datang[['Tarikh', 'Aktiviti']].copy()
+    df_prog_akan_datang['Tarikh'] = df_prog_akan_datang['Tarikh'].dt.strftime('%A, %d %B %Y')
+
+    df_prog_akan_datang.reset_index(drop=True, inplace=True)
+    df_prog_akan_datang.index += 1
+    df_prog_akan_datang.index.name = 'Bil'
+
+    st.dataframe(df_prog_akan_datang, use_container_width=True)
 
 # --- Nota Bawah ---
 st.markdown(
