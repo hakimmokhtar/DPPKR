@@ -62,12 +62,9 @@ sheet_url = "https://docs.google.com/spreadsheets/d/1qJmyiXVzcmzcfreSdDC1cV0Hr4i
 
 # --- ✅ Fungsi Baca Data ---
 def load_data():
-
     df = pd.read_csv(sheet_url)
-    df.columns = df.columns.str.strip()
-    df = df.dropna(subset=['Tarikh'])  # Buang baris tanpa tarikh
-    df['Tarikh'] = pd.to_datetime(df['Tarikh'], dayfirst=True, errors='coerce')  # Coerce tarikh salah jadi NaT
-    df = df.dropna(subset=['Tarikh'])  # Buang baris tarikh salah (NaT)
+    df.columns = df.columns.str.strip()  # Bersih nama kolum
+    df['Tarikh'] = pd.to_datetime(df['Tarikh'], dayfirst=True)
     df['Tahun'] = df['Tarikh'].dt.year
     df['Bulan'] = df['Tarikh'].dt.strftime('%B')
     df['BulanNum'] = df['Tarikh'].dt.month
@@ -80,7 +77,6 @@ jumlah_program = len(df)
 program_hari_ini = df[df['Tarikh'].dt.date == datetime.date.today()]
 jumlah_program_hari_ini = len(program_hari_ini)
 jumlah_program_akan_datang = len(df[df['Tarikh'].dt.date > datetime.date.today()])
-jumlah_program_selesai = len(df[df['Tarikh'].dt.date < datetime.date.today()])
 
 # --- ✅ Dropdown Tahun ---
 tahun_list = sorted(
@@ -90,15 +86,15 @@ tahun_list = sorted(
 tahun_dipilih = st.selectbox("Pilih Tahun", tahun_list)
 
 jumlah_program_tahun_ini = len(df[df['Tahun'] == tahun_dipilih])
-jumlah_program_selesai = len(df[df['Tarikh'].dt.date < datetime.date.today()])
 
 # --- ✅ Statistik Paparan ---
-col1, col2, col3, col4, col5 = st.columns(5)
+
+col1, col2, col3, col4 = st.columns(4)
 col1.metric("Jumlah Program", jumlah_program)
 col2.metric("Program Hari Ini", jumlah_program_hari_ini)
 col3.metric("Akan Datang", jumlah_program_akan_datang)
 col4.metric(f"Program {tahun_dipilih}", jumlah_program_tahun_ini)
-col5.metric("Program Selesai", jumlah_program_selesai)
+
 
 # --- ✅ Senarai Bulan Penuh (Jan - Dec) ---
 bulan_penuh = [
