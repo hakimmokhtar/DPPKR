@@ -1,6 +1,18 @@
 import streamlit as st
 import pandas as pd
-import streamlit as st
+
+# --- ✅ Background Hijau PAS ---
+st.markdown(
+    """
+    <style>
+    .stApp {
+        background-color: #006e3c;
+        color: white;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 # --- ✅ Logo ---
 st.image("LOGO DPPM.png", width=500)  # Boleh tukar ke URL logo sendiri
