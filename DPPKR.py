@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import datetime
+import streamlit as st
 
 # --- ✅ Background Hijau PAS ---
 st.markdown(
@@ -61,12 +62,11 @@ df_tapis = df[(df['Tahun'] == tahun_dipilih) & (df['BulanNum'] == bulan_dipilih_
 
 # Tajuk seksyen aktiviti
 st.markdown(f"## 📌 Jadual Aktiviti Bulan {bulan_dipilih_nama} {tahun_dipilih}")
-color: white !important;               /* Tulisan putih */
-    
+
 # Papar aktiviti sebagai jadual
 if df_tapis.empty:
     st.info("❌ Tiada aktiviti pada bulan ini.")
-    color: white !important;               /* Tulisan putih */
+    
 else:
     df_papar = df_tapis[['Tarikh', 'Aktiviti']].copy()
     df_papar['Tarikh'] = df_papar['Tarikh'].dt.strftime('%d %b %Y')
@@ -88,7 +88,6 @@ st.markdown("## 📅 Program Akan Datang")
 
 if df_akan_datang.empty:
     st.info("❌ Tiada program akan datang setakat ini.")
-    color: white !important;               /* Tulisan putih */
 else:
     df_prog_akan_datang = df_akan_datang[['Tarikh', 'Aktiviti']].copy()
     df_prog_akan_datang['Tarikh'] = df_prog_akan_datang['Tarikh'].dt.strftime('%A, %d %B %Y')
@@ -99,6 +98,25 @@ else:
 
     st.dataframe(df_prog_akan_datang, use_container_width=True)
 
+st.markdown("""
+    <style>
+    /* Tukar gaya st.info kepada warna teks putih */
+    .stAlert {
+        background-color: #006e3c !important;  /* Hijau PAS */
+        color: white !important;               /* Teks putih */
+        border-left: 0.5rem solid white !important;
+    }
+
+    .stAlert > div {
+        color: white !important;               /* Teks dalam kotak */
+        font-weight: normal;
+    }
+
+    .stAlert svg {
+        fill: white !important;                /* Ikon putih */
+    }
+    </style>
+""", unsafe_allow_html=True)
 footer_style = """
     <style>
     .footer {
