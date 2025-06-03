@@ -106,16 +106,6 @@ else:
     df_prog_akan_datang.index.name = 'Bil'
     st.dataframe(df_prog_akan_datang, use_container_width=True)
 
-# --- ✅ Program Hari Ini ---
-st.markdown("## 🎯 Program Hari Ini")
-
-if jumlah_program_hari_ini > 0:
-    df_hari_ini = program_hari_ini[['Tarikh', 'Aktiviti']].copy()
-    df_hari_ini['Tarikh'] = df_hari_ini['Tarikh'].dt.strftime('%A, %d %B %Y')
-    st.dataframe(df_hari_ini, use_container_width=True)
-else:
-    st.success("✅ Tiada program dijadualkan hari ini.")
-
 # --- ✅ Kalender Carian ---
 tarikh_dicari = st.date_input("📆 Pilih Tarikh Untuk Lihat Program", datetime.date.today())
 df_tarikh_dicari = df[df['Tarikh'].dt.date == tarikh_dicari]
