@@ -52,12 +52,6 @@ tahun_dipilih = st.selectbox("Pilih Tahun", tahun_list)
 jumlah_program_tahun_ini = len(df[df['Tahun'] == tahun_dipilih])
 
 # --- ✅ Statistik Paparan ---
-col1, col2, col3, col4 = st.columns(4)
-col1.metric("Jumlah Program", jumlah_program)
-col2.metric("Program Hari Ini", jumlah_program_hari_ini)
-col3.metric("Akan Datang", jumlah_program_akan_datang)
-col4.metric(f"Program {tahun_dipilih}", jumlah_program_tahun_ini)
-
 # --- ✅ Gaya st.info putih ---
 st.markdown("""
     <style>
@@ -75,6 +69,13 @@ st.markdown("""
     }
     </style>
 """, unsafe_allow_html=True)
+col1, col2, col3, col4 = st.columns(4)
+col1.metric("Jumlah Program", jumlah_program)
+col2.metric("Program Hari Ini", jumlah_program_hari_ini)
+col3.metric("Akan Datang", jumlah_program_akan_datang)
+col4.metric(f"Program {tahun_dipilih}", jumlah_program_tahun_ini)
+
+
 # --- ✅ Senarai Bulan Penuh (Jan - Dec) ---
 bulan_penuh = [
     ('Januari', 1), ('Februari', 2), ('Mac', 3), ('April', 4),
