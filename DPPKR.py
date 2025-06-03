@@ -62,26 +62,6 @@ bulan_dipilih_num = bulan_nombor_list[bulan_dipilih_index]
 df['BulanNum'] = df['Tarikh'].dt.month  # pastikan kolum BulanNum ada
 df_tapis = df[(df['Tahun'] == tahun_dipilih) & (df['BulanNum'] == bulan_dipilih_num)]
 
-st.markdown("""
-    <style>
-    /* Tukar gaya st.info kepada warna teks putih */
-    .stAlert {
-        background-color: #006e3c !important;  /* Hijau PAS */
-        color: white !important;               /* Teks putih */
-        border-left: 0.5rem solid white !important;
-    }
-
-    .stAlert > div {
-        color: white !important;               /* Teks dalam kotak */
-        font-weight: normal;
-    }
-
-    .stAlert svg {
-        fill: white !important;                /* Ikon putih */
-    }
-    </style>
-""", unsafe_allow_html=True)
-
 # Tajuk seksyen aktiviti
 st.markdown(f"## 📌 Jadual Aktiviti Bulan {bulan_dipilih_nama} {tahun_dipilih}")
 
