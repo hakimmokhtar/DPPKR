@@ -2,8 +2,6 @@ import streamlit as st
 import pandas as pd
 import datetime
 import streamlit as st
-import streamlit as st
-
 
 # --- ✅ Background Hijau PAS ---
 st.markdown(
@@ -32,8 +30,7 @@ def load_data():
     df = pd.read_csv(sheet_url)
     df.columns = df.columns.str.strip()  # Bersih nama kolum
     df['Tarikh'] = pd.to_datetime(df['Tarikh'], dayfirst=True)
-    df['Tahun'] = df['Tarikh'].dt.year.astype('Int64')  # Gunakan nullable integer
-    df = df[df['Tahun'].notna()]  # Buang baris yang tak ada tahun
+    df['Tahun'] = df['Tarikh'].dt.year
     df['Bulan'] = df['Tarikh'].dt.strftime('%B')
     df['BulanNum'] = df['Tarikh'].dt.month
     return df.sort_values('Tarikh')
@@ -41,10 +38,7 @@ def load_data():
 df = load_data()
 
 # --- ✅ Dropdown Tahun ---
-tahun_list = sorted(
-    [int(t) for t in df['Tahun'].dropna().unique() if 2025 <= t <= 2027],
-    reverse=True
-)
+tahun_list = sorted(set(df['Tahun'].unique()).union({2025, 2026, 2027}), reverse=True)
 tahun_dipilih = st.selectbox("Pilih Tahun", tahun_list)
 
 # --- ✅ Senarai Bulan Penuh (Jan - Dec) ---
@@ -65,29 +59,6 @@ bulan_dipilih_num = bulan_nombor_list[bulan_dipilih_index]
 # --- ✅ Tapis Data Ikut Pilihan Tahun dan Bulan ---
 df['BulanNum'] = df['Tarikh'].dt.month  # pastikan kolum BulanNum ada
 df_tapis = df[(df['Tahun'] == tahun_dipilih) & (df['BulanNum'] == bulan_dipilih_num)]
-
-st.markdown("""
-    <style>
-    /* Warna label selectbox */
-    label, .stSelectbox label {
-        color: white !important;
-        font-weight: bold;
-    }
-
-    /* Tukar warna teks dalam kotak selectbox */
-    .stSelectbox div[role="combobox"] {
-        color: white !important;
-        background-color: #006e3c !important;
-        border-radius: 5px;
-    }
-
-    /* Tukar warna teks dalam dropdown yang muncul */
-    .css-1n76uvr, .css-1d391kg {
-        color: black;  /* warna pilihan dalam dropdown */
-        background-color: white;
-    }
-    </style>
-""", unsafe_allow_html=True)
 
 # Tajuk seksyen aktiviti
 st.markdown(f"## 📌 Jadual Aktiviti Bulan {bulan_dipilih_nama} {tahun_dipilih}")
