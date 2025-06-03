@@ -32,7 +32,8 @@ def load_data():
     df = pd.read_csv(sheet_url)
     df.columns = df.columns.str.strip()  # Bersih nama kolum
     df['Tarikh'] = pd.to_datetime(df['Tarikh'], dayfirst=True)
-    df['Tahun'] = df['Tarikh'].dt.year
+    df['Tahun'] = df['Tarikh'].dt.year.astype('Int64')  # Gunakan nullable integer
+    df = df[df['Tahun'].notna()]  # Buang baris yang tak ada tahun
     df['Bulan'] = df['Tarikh'].dt.strftime('%B')
     df['BulanNum'] = df['Tarikh'].dt.month
     return df.sort_values('Tarikh')
@@ -40,7 +41,7 @@ def load_data():
 df = load_data()
 
 # --- ✅ Dropdown Tahun ---
-tahun_list = sorted(set(df['Tahun'].unique()).union({2025, 2026, 2027}), reverse=True)
+tahun_list = sorted([int(t) for t in df['Tahun'].dropna().unique() if pd.notnull(t)], reverse=True)
 tahun_dipilih = st.selectbox("Pilih Tahun", tahun_list)
 
 # --- ✅ Senarai Bulan Penuh (Jan - Dec) ---
