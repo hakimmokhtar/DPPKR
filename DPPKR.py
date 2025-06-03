@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import datetime
-import streamlit as st
 
 # --- ✅ Background Hijau PAS ---
 st.markdown(
@@ -37,12 +36,27 @@ def load_data():
 
 df = load_data()
 
+# --- ✅ Statistik Ringkas ---
+jumlah_program = len(df)
+program_hari_ini = df[df['Tarikh'].dt.date == datetime.date.today()]
+jumlah_program_hari_ini = len(program_hari_ini)
+jumlah_program_akan_datang = len(df[df['Tarikh'].dt.date > datetime.date.today()])
+
 # --- ✅ Dropdown Tahun ---
 tahun_list = sorted(
     [int(t) for t in df['Tahun'].dropna().unique() if 2025 <= t <= 2027],
     reverse=True
 )
 tahun_dipilih = st.selectbox("Pilih Tahun", tahun_list)
+
+jumlah_program_tahun_ini = len(df[df['Tahun'] == tahun_dipilih])
+
+# --- ✅ Statistik Paparan ---
+col1, col2, col3, col4 = st.columns(4)
+col1.metric("Jumlah Program", jumlah_program)
+col2.metric("Program Hari Ini", jumlah_program_hari_ini)
+col3.metric("Akan Datang", jumlah_program_akan_datang)
+col4.metric(f"Program {tahun_dipilih}", jumlah_program_tahun_ini)
 
 # --- ✅ Senarai Bulan Penuh (Jan - Dec) ---
 bulan_penuh = [
@@ -69,61 +83,78 @@ st.markdown(f"## 📌 Jadual Aktiviti Bulan {bulan_dipilih_nama} {tahun_dipilih}
 # Papar aktiviti sebagai jadual
 if df_tapis.empty:
     st.info("❌ Tiada aktiviti pada bulan ini.")
-    
 else:
     df_papar = df_tapis[['Tarikh', 'Aktiviti']].copy()
     df_papar['Tarikh'] = df_papar['Tarikh'].dt.strftime('%d %b %Y')
-
-    # Tambah kolum Bil bermula dari 1
     df_papar.reset_index(drop=True, inplace=True)
     df_papar.index += 1
     df_papar.index.name = 'Bil'
-
     st.dataframe(df_papar, use_container_width=True)
-    
-# --- Program Akan Datang ---
 
-tarikh_hari_ini = datetime.date.today()
-
-df_akan_datang = df[df['Tarikh'].dt.date > tarikh_hari_ini]
+# --- ✅ Program Akan Datang ---
 
 st.markdown("## 📅 Program Akan Datang")
+df_akan_datang = df[df['Tarikh'].dt.date > datetime.date.today()].sort_values('Tarikh').head(3)
 
 if df_akan_datang.empty:
     st.info("❌ Tiada program akan datang setakat ini.")
 else:
-    df_prog_akan_datang = df_akan_datang[['Tarikh', 'Aktiviti']].copy().head(3)
+    df_prog_akan_datang = df_akan_datang[['Tarikh', 'Aktiviti']].copy()
     df_prog_akan_datang['Tarikh'] = df_prog_akan_datang['Tarikh'].dt.strftime('%A, %d %B %Y')
-
     df_prog_akan_datang.reset_index(drop=True, inplace=True)
     df_prog_akan_datang.index += 1
     df_prog_akan_datang.index.name = 'Bil'
-
     st.dataframe(df_prog_akan_datang, use_container_width=True)
 
+# --- ✅ Program Hari Ini ---
+st.markdown("## 🎯 Program Hari Ini")
+
+if jumlah_program_hari_ini > 0:
+    df_hari_ini = program_hari_ini[['Tarikh', 'Aktiviti']].copy()
+    df_hari_ini['Tarikh'] = df_hari_ini['Tarikh'].dt.strftime('%A, %d %B %Y')
+    st.dataframe(df_hari_ini, use_container_width=True)
+else:
+    st.success("✅ Tiada program dijadualkan hari ini.")
+
+# --- ✅ Kalender Carian ---
+tarikh_dicari = st.date_input("📆 Pilih Tarikh Untuk Lihat Program", datetime.date.today())
+df_tarikh_dicari = df[df['Tarikh'].dt.date == tarikh_dicari]
+
+st.markdown(f"## 🔍 Program Pada {tarikh_dicari.strftime('%A, %d %B %Y')}")
+
+if df_tarikh_dicari.empty:
+    st.info("❌ Tiada program pada tarikh ini.")
+else:
+    df_view = df_tarikh_dicari[['Tarikh', 'Aktiviti']].copy()
+    df_view['Tarikh'] = df_view['Tarikh'].dt.strftime('%d %b %Y')
+    df_view.reset_index(drop=True, inplace=True)
+    df_view.index += 1
+    df_view.index.name = 'Bil'
+    st.dataframe(df_view, use_container_width=True)
+
+# --- ✅ Gaya st.info putih ---
 st.markdown("""
     <style>
-    /* Tukar gaya st.info kepada warna teks putih */
     .stAlert {
-        background-color: #006e3c !important;  /* Hijau PAS */
-        color: white !important;               /* Teks putih */
+        background-color: #006e3c !important;
+        color: white !important;
         border-left: 0.5rem solid white !important;
     }
-
     .stAlert > div {
-        color: white !important;               /* Teks dalam kotak */
+        color: white !important;
         font-weight: normal;
     }
-
     .stAlert svg {
-        fill: white !important;                /* Ikon putih */
+        fill: white !important;
     }
     </style>
 """, unsafe_allow_html=True)
+
+# --- ✅ Footer ---
 footer_style = """
     <style>
     .footer {
-        background-color: #006e3c;  /* hijau gelap */
+        background-color: #006e3c;
         color: white;
         padding: 15px 10px;
         text-align: center;
@@ -132,7 +163,7 @@ footer_style = """
         border-radius: 5px;
     }
     .footer a {
-        color: #90ee90;  /* light green */
+        color: #90ee90;
         text-decoration: none;
         margin: 0 8px;
     }
