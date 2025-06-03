@@ -121,13 +121,20 @@ footer_style = """
 
 footer_html = f"""
 <div class="footer">
+footer_html = f"""
+<div class="footer">
     DISEDIAKAN OLEH <b>JABATAN SETIAUSAHA DPPKR 25-27</b> <br>
-    📧 <a href="mailto:dppkrembau.gmail.com">dppkrembau.gmail.com</a> |
-    🔗 <a href="https://www.facebook.com/pemudapasrembau" target="_blank">Facebook Pemuda PAS Rembau</a> <br>
-    📞 SU : <a href="tel:+60136343231">+60 13-634 3231</a> | 
-    💬 <a href="https://wa.me/60136343231" target="_blank">WhatsApp</a> <br>
-    📞 PSU 1: <a href="tel:+60173607925">+60 17-360 7925</a> | 
-    💬 <a href="https://wa.me/60173607925" target="_blank">WhatsApp</a>
+    📧 <a href="mailto:setiausaha@dppkr.my">setiausaha@dppkr.my</a> |
+    🔗 <a href="https://www.facebook.com/DPPKR" target="_blank">Facebook DPPKR</a> <br>
+
+    📞 SU 1: <a href="tel:+60123456789">+60 12-345 6789</a> | 
+    💬 <a href="https://wa.me/60123456789" target="_blank">WhatsApp</a> <br>
+
+    📞 SU 2: <a href="tel:+60198765432">+60 19-876 5432</a> | 
+    💬 <a href="https://wa.me/60198765432" target="_blank">WhatsApp</a>
+</div>
+"""
+
 </div>
 """
 
