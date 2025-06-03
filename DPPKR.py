@@ -42,25 +42,6 @@ df = load_data()
 # --- ✅ Dropdown Tahun ---
 tahun_list = sorted(set(df['Tahun'].unique()).union({2025, 2026, 2027}), reverse=True)
 tahun_dipilih = st.selectbox("Pilih Tahun", tahun_list)
-st.markdown("""
-    <style>
-    /* Tukar gaya st.info kepada warna teks putih */
-    .stAlert {
-        background-color: #006e3c !important;  /* Hijau PAS */
-        color: white !important;               /* Teks putih */
-        border-left: 0.5rem solid white !important;
-    }
-
-    .stAlert > div {
-        color: white !important;               /* Teks dalam kotak */
-        font-weight: normal;
-    }
-
-    .stAlert svg {
-        fill: white !important;                /* Ikon putih */
-    }
-    </style>
-""", unsafe_allow_html=True)
 
 # --- ✅ Senarai Bulan Penuh (Jan - Dec) ---
 bulan_penuh = [
@@ -76,6 +57,11 @@ bulan_nombor_list = [b[1] for b in bulan_penuh]
 bulan_dipilih_nama = st.selectbox("Pilih Bulan", bulan_nama_list)
 bulan_dipilih_index = bulan_nama_list.index(bulan_dipilih_nama)
 bulan_dipilih_num = bulan_nombor_list[bulan_dipilih_index]
+
+# --- ✅ Tapis Data Ikut Pilihan Tahun dan Bulan ---
+df['BulanNum'] = df['Tarikh'].dt.month  # pastikan kolum BulanNum ada
+df_tapis = df[(df['Tahun'] == tahun_dipilih) & (df['BulanNum'] == bulan_dipilih_num)]
+
 st.markdown("""
     <style>
     /* Tukar gaya st.info kepada warna teks putih */
@@ -95,10 +81,6 @@ st.markdown("""
     }
     </style>
 """, unsafe_allow_html=True)
-
-# --- ✅ Tapis Data Ikut Pilihan Tahun dan Bulan ---
-df['BulanNum'] = df['Tarikh'].dt.month  # pastikan kolum BulanNum ada
-df_tapis = df[(df['Tahun'] == tahun_dipilih) & (df['BulanNum'] == bulan_dipilih_num)]
 
 # Tajuk seksyen aktiviti
 st.markdown(f"## 📌 Jadual Aktiviti Bulan {bulan_dipilih_nama} {tahun_dipilih}")
