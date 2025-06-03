@@ -58,7 +58,6 @@ col1.metric("Jumlah Program", jumlah_program)
 col2.metric("Program Hari Ini", jumlah_program_hari_ini)
 col3.metric("Akan Datang", jumlah_program_akan_datang)
 col4.metric(f"Program {tahun_dipilih}", jumlah_program_tahun_ini)
-st.dataframe(df_papar, use_container_width=True)
 
 
 # --- ✅ Senarai Bulan Penuh (Jan - Dec) ---
