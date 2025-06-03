@@ -15,19 +15,6 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-st.markdown(
-    """
-    <style>
-    /* Ubah warna latar belakang info box */
-    .stAlert {
-        background-color: #006e3c !important;  /* Hijau PAS */
-        color: white !important;              /* Tulisan putih */
-        border-left: 0.5rem solid white;      /* Bar sisi putih */
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
 
 # --- ✅ Logo ---
 st.image("LOGO DPPM.png", width=700)  # Boleh tukar ke URL logo sendiri
@@ -75,6 +62,19 @@ df_tapis = df[(df['Tahun'] == tahun_dipilih) & (df['BulanNum'] == bulan_dipilih_
 
 # Tajuk seksyen aktiviti
 st.markdown(f"## 📌 Jadual Aktiviti Bulan {bulan_dipilih_nama} {tahun_dipilih}")
+st.markdown(
+    """
+    <style>
+    /* Ubah warna latar belakang info box */
+    .stAlert {
+        background-color: #006e3c !important;  /* Hijau PAS */
+        color: white !important;              /* Tulisan putih */
+        border-left: 0.5rem solid white;      /* Bar sisi putih */
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 # Papar aktiviti sebagai jadual
 if df_tapis.empty:
@@ -90,7 +90,21 @@ else:
     df_papar.index.name = 'Bil'
 
     st.dataframe(df_papar, use_container_width=True)
-    
+
+st.markdown(
+    """
+    <style>
+    /* Ubah warna latar belakang info box */
+    .stAlert {
+        background-color: #006e3c !important;  /* Hijau PAS */
+        color: white !important;              /* Tulisan putih */
+        border-left: 0.5rem solid white;      /* Bar sisi putih */
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 # --- Program Akan Datang ---
 
 tarikh_hari_ini = datetime.date.today()
