@@ -15,6 +15,42 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+st.markdown("""
+    <style>
+    /* Tukar teks keseluruhan jadi putih */
+    .stApp, .stMarkdown, .stSelectbox label, .stDateInput label,
+    .stDataFrame, .stMetric, .stTextInput, .stButton, .stNumberInput label {
+        color: white !important;
+    }
+
+    /* Tukar header dan tajuk besar jadi putih */
+    h1, h2, h3, h4, h5, h6 {
+        color: white !important;
+    }
+
+    /* Tukar label dan input teks */
+    .css-1d391kg { color: white !important; }
+
+    /* Tukar warna latar dropdown & input */
+    .stSelectbox div[data-baseweb="select"],
+    .stDateInput input {
+        background-color: #004d2a !important;
+        color: white !important;
+    }
+
+    /* Tukar warna kotak DataFrame header */
+    .dataframe th {
+        background-color: #004d2a !important;
+        color: white !important;
+    }
+
+    /* Tukar warna isi DataFrame */
+    .dataframe td {
+        color: white !important;
+        background-color: #006e3c !important;
+    }
+    </style>
+""", unsafe_allow_html=True)
 # --- ✅ Logo ---
 st.image("LOGO DPPM.png", width=700)  # Boleh tukar ke URL logo sendiri
 
