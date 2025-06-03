@@ -79,7 +79,7 @@ else:
 # --- Nota Bawah ---
 st.markdown(
     "<hr style='border: 1px solid #ccc;'>"
-    "<p style='text-align:left; color:black; font-size:14px;'>"
+    "<p style='text-align:left; color:white; font-size:14px;'>"
     "<em>DISEDIAKAN OLEH JABATAN SETIAUSAHA DPPKR 25-27</em>"
     "</p>",
     unsafe_allow_html=True
