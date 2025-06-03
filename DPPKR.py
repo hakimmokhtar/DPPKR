@@ -122,7 +122,7 @@ footer_style = """
 footer_html = """
 <div class="footer">
     <b>DISEDIAKAN OLEH JABATAN SETIAUSAHA DPPKR 25-27</b><br>
-    <span>&#128231;</span> <a href="mailto:setiausaha@dppkr.my">setiausaha@dppkr.my</a> |
+    <span>&#128231;</span> <a href="mailto:dppkrembau@gmail.com">EMEL : DEWAN PEMUDA PAS KAWASAN REMBAU</a> |
     <span>&#128279;</span> <a href="https://facebook.com/pemudapasrembau" target="_blank">Facebook </a><br>
     <span>&#128222;</span> SU : <a href="tel:+60136343231">HAKIM</a> |
     <span>&#128172;</span> <a href="https://wa.me/60136343231" target="_blank">WhatsApp</a><br>
