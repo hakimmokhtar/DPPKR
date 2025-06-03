@@ -92,7 +92,7 @@ st.markdown("## 📅 Program Akan Datang")
 if df_akan_datang.empty:
     st.info("❌ Tiada program akan datang setakat ini.")
 else:
-    df_prog_akan_datang = df_akan_datang[['Tarikh', 'Aktiviti']].copy()
+    df_prog_akan_datang = df_akan_datang[['Tarikh', 'Aktiviti']].copy().head(3)
     df_prog_akan_datang['Tarikh'] = df_prog_akan_datang['Tarikh'].dt.strftime('%A, %d %B %Y')
 
     df_prog_akan_datang.reset_index(drop=True, inplace=True)
