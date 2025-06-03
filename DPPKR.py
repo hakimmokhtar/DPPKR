@@ -87,6 +87,7 @@ tahun_list = sorted(
 tahun_dipilih = st.selectbox("Pilih Tahun", tahun_list)
 
 jumlah_program_tahun_ini = len(df[df['Tahun'] == tahun_dipilih])
+jumlah_program_selesai = len(df[df['Tarikh'].dt.date < datetime.date.today()])
 
 # --- ✅ Statistik Paparan ---
 col1, col2, col3, col4, col5 = st.columns(5)
