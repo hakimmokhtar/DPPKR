@@ -41,17 +41,6 @@ jumlah_program = len(df)
 program_hari_ini = df[df['Tarikh'].dt.date == datetime.date.today()]
 jumlah_program_hari_ini = len(program_hari_ini)
 jumlah_program_akan_datang = len(df[df['Tarikh'].dt.date > datetime.date.today()])
-
-# --- ✅ Dropdown Tahun ---
-tahun_list = sorted(
-    [int(t) for t in df['Tahun'].dropna().unique() if 2025 <= t <= 2027],
-    reverse=True
-)
-tahun_dipilih = st.selectbox("Pilih Tahun", tahun_list)
-
-jumlah_program_tahun_ini = len(df[df['Tahun'] == tahun_dipilih])
-
-# --- ✅ Statistik Paparan ---
 # --- ✅ Gaya st.info putih ---
 st.markdown("""
     <style>
@@ -69,6 +58,17 @@ st.markdown("""
     }
     </style>
 """, unsafe_allow_html=True)
+# --- ✅ Dropdown Tahun ---
+tahun_list = sorted(
+    [int(t) for t in df['Tahun'].dropna().unique() if 2025 <= t <= 2027],
+    reverse=True
+)
+tahun_dipilih = st.selectbox("Pilih Tahun", tahun_list)
+
+jumlah_program_tahun_ini = len(df[df['Tahun'] == tahun_dipilih])
+
+# --- ✅ Statistik Paparan ---
+
 col1, col2, col3, col4 = st.columns(4)
 col1.metric("Jumlah Program", jumlah_program)
 col2.metric("Program Hari Ini", jumlah_program_hari_ini)
