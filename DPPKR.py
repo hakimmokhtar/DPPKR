@@ -4,108 +4,49 @@ import datetime
 from urllib.parse import quote
 
 # --- ✅ Background Hijau PAS ---
+st.markdown(
+    """
+    <style>
+    .stApp {
+        background-color: #006e3c;
+        color: white;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 st.markdown("""
-<style>
-.stApp {
-    background-color: #006e3c;
-    color: white;
-}
-.stApp, .stMarkdown, .stSelectbox label, .stDateInput label,
-.stDataFrame, .stMetric, .stTextInput, .stButton, .stNumberInput label {
-    color: white !important;
-}
-h1, h2, h3, h4, h5, h6 {
-    color: white !important;
-}
-.css-1d391kg { color: white !important; }
-.stSelectbox div[data-baseweb="select"],
-.stDateInput input {
-    background-color: #004d2a !important;
-    color: white !important;
-}
-.dataframe th {
-    background-color: #cce5cc !important;
-    color: black !important;
-}
-.dataframe td {
-    background-color: #e6f2e6 !important;
-    color: black !important;
-}
-.my_table {
-    background-color: #e6f2e6;
-    color: black;
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 16px;
-}
-.my_table th {
-    background-color: #cce5cc;
-    color: black;
-    padding: 8px;
-    text-align: left;
-}
-.my_table td {
-    background-color: #e6f2e6;
-    color: black;
-    padding: 8px;
-}
-.box-container {
-    background-color: white;
-    color: black;
-    padding: 20px;
-    border-radius: 20px;
-    text-align: center;
-    font-size: 24px;
-    box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
-}
-.stAlert {
-    background-color: #006e3c !important;
-    color: white !important;
-    border-left: 0.5rem solid white !important;
-}
-.stAlert > div {
-    color: white !important;
-    font-weight: normal;
-}
-.stAlert svg {
-    fill: white !important;
-}
-.footer {
-    background-color: #006e3c;
-    color: white;
-    padding: 15px 10px;
-    text-align: center;
-    font-size: 0.9rem;
-    margin-top: 30px;
-    border-radius: 5px;
-}
-.footer a {
-    color: #90ee90;
-    text-decoration: none;
-    margin: 0 8px;
-}
-.footer a:hover {
-    text-decoration: underline;
-}
-.element-container .stMetric label, .element-container .stMetric div {
-    color: white !important;
-}
-.stMetric {
-    background-color: #004d2a;
-    padding: 10px;
-    border-radius: 10px;
-}
-</style>
+    <style>
+    .stApp, .stMarkdown, .stSelectbox label, .stDateInput label,
+    .stDataFrame, .stMetric, .stTextInput, .stButton, .stNumberInput label {
+        color: white !important;
+    }
+    h1, h2, h3, h4, h5, h6 {
+        color: white !important;
+    }
+    .css-1d391kg { color: white !important; }
+    .stSelectbox div[data-baseweb="select"],
+    .stDateInput input {
+        background-color: #004d2a !important;
+        color: white !important;
+    }
+
+    /* ✅ UPDATE WARNA TULISAN JADUAL */
+    .dataframe th {
+        background-color: #cce5cc !important;
+        color: black !important;
+    }
+    .dataframe td {
+        background-color: #e6f2e6 !important;
+        color: black !important;
+    }
+    </style>
 """, unsafe_allow_html=True)
 
-cols = st.columns(5)
-icons = ["\ud83d\udcca", "\ud83d\udccc", "\ud83d\uddd5\ufe0f", "\ud83d\uddd3\ufe0f", "\u2705"]
-labels = ["Statistik", "Program Akan Datang", "Takwim", "Senarai Program", "Selesai"]
-for col, icon, label in zip(cols, icons, labels):
-    with col:
-        st.markdown(f'<div class="box-container">{icon}<br><span>{label}</span></div>', unsafe_allow_html=True)
 
 st.image("LOGO DPPM.png", width=700)
+
 st.title("DEWAN PEMUDA PAS KAWASAN REMBAU 2025-2027")
 
 sheet_url = "https://docs.google.com/spreadsheets/d/1qJmyiXVzcmzcfreSdDC1cV0Hr4iVsQcA99On-0NPOck/export?format=csv"
@@ -120,124 +61,223 @@ def load_data():
     return df.sort_values('Tarikh')
 
 df = load_data()
-today = datetime.date.today()
 
-# Program Hari Ini
+today = datetime.date.today()
 program_hari_ini = df[df['Tarikh'].dt.date == today]
+
 if not program_hari_ini.empty:
     aktiviti_list = program_hari_ini['Aktiviti'].tolist()
     tempat_list = program_hari_ini['Tempat'].tolist()
-    senarai_program = "<ul>" + "".join(f"<li>{a} - {t}</li>" for a, t in zip(aktiviti_list, tempat_list)) + "</ul>"
-    st.markdown(f"""<div style="background-color:#004d2a; padding:20px; border-radius:10px; border-left:8px solid #ffffff">
-        <h4 style='color:white;'>\ud83d\udce2 <u>Program Hari Ini ({today.strftime('%A, %d %B %Y')}):</u></h4>{senarai_program}</div>""", unsafe_allow_html=True)
-    if len(aktiviti_list) == 1:
-        st.toast(f"\ud83d\udce2 Program Hari Ini: {aktiviti_list[0]}", icon="\ud83d\udccc")
-    else:
-        st.toast(f"\ud83d\udce2 {len(aktiviti_list)} Program Hari Ini!", icon="\ud83d\udccc")
-        for a in aktiviti_list:
-            st.toast(f"\ud83d\udccc {a}")
-    mesej_wa = f"*Program Hari Ini ({today.strftime('%A, %d %B %Y')})*\n" + "\n".join(f"\ud83d\udccc {a}\n\ud83d\udccd {t}\n" for a, t in zip(aktiviti_list, tempat_list))
-    pautan_wa = f"https://wa.me/?text={quote(mesej_wa)}"
-    st.markdown(f"[\ud83d\udce4 Kongsi ke WhatsApp]({pautan_wa})", unsafe_allow_html=True)
 
-# Statistik
+    senarai_program = "<ul>" + "".join(
+        f"<li>{aktiviti} - {tempat}</li>" for aktiviti, tempat in zip(aktiviti_list, tempat_list)
+    ) + "</ul>"
+
+    st.markdown(
+        f"""
+        <div style="background-color:#004d2a; padding:20px; border-radius:10px; border-left:8px solid #ffffff">
+            <h4 style="color:white;">📢 <u>Program Hari Ini ({today.strftime('%A, %d %B %Y')}):</u></h4>
+            {senarai_program}
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+    if len(aktiviti_list) == 1:
+        st.toast(f"📢 Program Hari Ini: {aktiviti_list[0]}", icon="📌")
+    else:
+        st.toast(f"📢 {len(aktiviti_list)} Program Hari Ini!", icon="📌")
+        for aktiviti in aktiviti_list:
+            st.toast(f"📌 {aktiviti}")
+
+    mesej_wa = f"*Program Hari Ini ({today.strftime('%A, %d %B %Y')})*\n"
+    for aktiviti, tempat in zip(aktiviti_list, tempat_list):
+        mesej_wa += f"📌 {aktiviti}\n📍 {tempat}\n\n"
+
+    pautan_wa = f"https://wa.me/?text={quote(mesej_wa)}"
+    st.markdown(f"[📤 Kongsi ke WhatsApp]({pautan_wa})", unsafe_allow_html=True)
+
 jumlah_program = len(df)
 jumlah_program_hari_ini = len(program_hari_ini)
 jumlah_program_akan_datang = len(df[df['Tarikh'].dt.date > today])
-tahun_list = sorted([int(t) for t in df['Tahun'].dropna().unique() if 2025 <= t <= 2027], reverse=True)
+
+tahun_list = sorted(
+    [int(t) for t in df['Tahun'].dropna().unique() if 2025 <= t <= 2027],
+    reverse=True
+)
 tahun_dipilih = st.selectbox("Pilih Tahun", tahun_list)
+
 jumlah_program_tahun_ini = len(df[df['Tahun'] == tahun_dipilih])
 jumlah_program_selesai = len(df[df['Tarikh'].dt.date < today])
 
 with st.container():
     col1, col2, col3, col4, col5 = st.columns(5)
-    if col1.button(f"\ud83d\udcca Jumlah Program\n({jumlah_program})"):
-        with st.expander("\ud83d\udccb Senarai Semua Program", expanded=True):
+    if col1.button(f"📊 Jumlah Program\n({jumlah_program})"):
+        with st.expander("📋 Senarai Semua Program", expanded=True):
             df_all = df[['Tarikh', 'Aktiviti', 'Tempat']].copy()
             df_all['Tarikh'] = df_all['Tarikh'].dt.strftime('%d %b %Y')
+            df_all.reset_index(drop=True, inplace=True)
             df_all.index += 1
             df_all.index.name = 'Bil'
             st.dataframe(df_all, use_container_width=True)
-    if col2.button(f"\ud83d\udccc Program Hari Ini\n({jumlah_program_hari_ini})"):
-        with st.expander("\ud83d\udccb Senarai Program Hari Ini", expanded=True):
-            df_hari_ini = program_hari_ini[['Tarikh', 'Aktiviti', 'Tempat']].copy()
-            df_hari_ini['Tarikh'] = df_hari_ini['Tarikh'].dt.strftime('%d %b %Y')
-            df_hari_ini.index += 1
-            df_hari_ini.index.name = 'Bil'
-            st.markdown(df_hari_ini.to_html(index=True, classes='my_table', border=0), unsafe_allow_html=True)
-    if col3.button(f"\ud83d\uddd5\ufe0f Akan Datang\n({jumlah_program_akan_datang})"):
-        with st.expander("\ud83d\udccb Program Akan Datang", expanded=True):
+
+    if col2.button(f"📌 Program Hari Ini\n({jumlah_program_hari_ini})"):
+        with st.expander("📋 Senarai Program Hari Ini", expanded=True):
+
+            df_papar = program_hari_ini[['Tarikh', 'Aktiviti', 'Tempat']].copy()
+            df_papar['Tarikh'] = df_papar['Tarikh'].dt.strftime('%d %b %Y')
+            df_papar.reset_index(drop=True, inplace=True)
+            df_papar.index += 1
+            df_papar.index.name = 'Bil'
+            st.dataframe(df_papar, use_container_width=True)
+
+
+    if col3.button(f"📅 Akan Datang\n({jumlah_program_akan_datang})"):
+        with st.expander("📋 Program Akan Datang", expanded=True):
             df_future = df[df['Tarikh'].dt.date > today][['Tarikh', 'Aktiviti', 'Tempat']].copy()
             df_future['Tarikh'] = df_future['Tarikh'].dt.strftime('%d %b %Y')
+            df_future.reset_index(drop=True, inplace=True)
             df_future.index += 1
             df_future.index.name = 'Bil'
             st.dataframe(df_future, use_container_width=True)
-    if col4.button(f"\ud83d\uddd3\ufe0f Program {tahun_dipilih}\n({jumlah_program_tahun_ini})"):
-        with st.expander(f"\ud83d\udccb Senarai Program Tahun {tahun_dipilih}", expanded=True):
+
+    if col4.button(f"📆 Program {tahun_dipilih}\n({jumlah_program_tahun_ini})"):
+        with st.expander(f"📋 Senarai Program Tahun {tahun_dipilih}", expanded=True):
             df_year = df[df['Tahun'] == tahun_dipilih][['Tarikh', 'Aktiviti', 'Tempat']].copy()
             df_year['Tarikh'] = df_year['Tarikh'].dt.strftime('%d %b %Y')
+            df_year.reset_index(drop=True, inplace=True)
             df_year.index += 1
             df_year.index.name = 'Bil'
             st.dataframe(df_year, use_container_width=True)
-    if col5.button(f"\u2705 Program Selesai\n({jumlah_program_selesai})"):
-        with st.expander("\ud83d\udccb Program Telah Selesai", expanded=True):
+
+    if col5.button(f"✅ Program Selesai\n({jumlah_program_selesai})"):
+        with st.expander("📋 Program Telah Selesai", expanded=True):
             df_done = df[df['Tarikh'].dt.date < today][['Tarikh', 'Aktiviti', 'Tempat']].copy()
             df_done['Tarikh'] = df_done['Tarikh'].dt.strftime('%d %b %Y')
+            df_done.reset_index(drop=True, inplace=True)
             df_done.index += 1
             df_done.index.name = 'Bil'
             st.dataframe(df_done, use_container_width=True)
 
-# Tapis Bulan
-bulan_penuh = [('Januari', 1), ('Februari', 2), ('Mac', 3), ('April', 4), ('Mei', 5), ('Jun', 6),
-    ('Julai', 7), ('Ogos', 8), ('September', 9), ('Oktober', 10), ('November', 11), ('Disember', 12)]
+
+bulan_penuh = [
+    ('Januari', 1), ('Februari', 2), ('Mac', 3), ('April', 4),
+    ('Mei', 5), ('Jun', 6), ('Julai', 7), ('Ogos', 8),
+    ('September', 9), ('Oktober', 10), ('November', 11), ('Disember', 12)
+]
+
 bulan_nama_list = [b[0] for b in bulan_penuh]
 bulan_nombor_list = [b[1] for b in bulan_penuh]
+
 bulan_dipilih_nama = st.selectbox("Pilih Bulan", bulan_nama_list)
 bulan_dipilih_index = bulan_nama_list.index(bulan_dipilih_nama)
 bulan_dipilih_num = bulan_nombor_list[bulan_dipilih_index]
+
+df['BulanNum'] = df['Tarikh'].dt.month
 df_tapis = df[(df['Tahun'] == tahun_dipilih) & (df['BulanNum'] == bulan_dipilih_num)]
 
-st.markdown(f"## \ud83d\udccc Jadual Aktiviti Bulan {bulan_dipilih_nama} {tahun_dipilih}")
+st.markdown(f"## 📌 Jadual Aktiviti Bulan {bulan_dipilih_nama} {tahun_dipilih}")
+
 if df_tapis.empty:
-    st.info("\u274c Tiada aktiviti pada bulan ini.")
+    st.info("❌ Tiada aktiviti pada bulan ini.")
 else:
-    df_bulan = df_tapis[['Tarikh', 'Aktiviti', 'Tempat']].copy()
-    df_bulan['Tarikh'] = df_bulan['Tarikh'].dt.strftime('%d %b %Y')
-    df_bulan.index += 1
-    df_bulan.index.name = 'Bil'
-    st.dataframe(df_bulan, use_container_width=True)
+    df_papar = df_tapis[['Tarikh', 'Aktiviti', 'Tempat']].copy()
+    df_papar['Tarikh'] = df_papar['Tarikh'].dt.strftime('%d %b %Y')
+    df_papar.reset_index(drop=True, inplace=True)
+    df_papar.index += 1
+    df_papar.index.name = 'Bil'
+    st.dataframe(df_papar, use_container_width=True)
 
-# Program Terdekat
-st.markdown("## \ud83d\uddd5\ufe0f Program Yang Terdekat")
+st.markdown("## 📅 Program Yang Terdekat")
 df_akan_datang = df[df['Tarikh'].dt.date >= today].sort_values('Tarikh').head(3)
-if df_akan_datang.empty:
-    st.info("\u274c Tiada program akan datang setakat ini.")
-else:
-    df_terdekat = df_akan_datang[['Tarikh', 'Aktiviti', 'Tempat']].copy()
-    df_terdekat['Tarikh'] = df_terdekat['Tarikh'].dt.strftime('%A, %d %B %Y')
-    df_terdekat.index += 1
-    df_terdekat.index.name = 'Bil'
-    st.dataframe(df_terdekat, use_container_width=True)
 
-# Tapis Tarikh Tertentu
-tarikh_dicari = st.date_input("\ud83d\uddd3\ufe0f Pilih Tarikh Untuk Lihat Program", today)
+if df_akan_datang.empty:
+    st.info("❌ Tiada program akan datang setakat ini.")
+else:
+    df_prog_akan_datang = df_akan_datang[['Tarikh', 'Aktiviti', 'Tempat']].copy()
+    df_prog_akan_datang['Tarikh'] = df_prog_akan_datang['Tarikh'].dt.strftime('%A, %d %B %Y')
+    df_prog_akan_datang.reset_index(drop=True, inplace=True)
+    df_prog_akan_datang.index += 1
+    df_prog_akan_datang.index.name = 'Bil'
+    st.dataframe(df_prog_akan_datang, use_container_width=True)
+
+tarikh_dicari = st.date_input("📆 Pilih Tarikh Untuk Lihat Program", today)
 df_tarikh_dicari = df[df['Tarikh'].dt.date == tarikh_dicari]
-st.markdown(f"## \ud83d\udd0d Program Pada {tarikh_dicari.strftime('%A, %d %B %Y')}")
+
+st.markdown(f"## 🔍 Program Pada {tarikh_dicari.strftime('%A, %d %B %Y')}")
+
 if df_tarikh_dicari.empty:
-    st.info("\u274c Tiada program pada tarikh ini.")
+    st.info("❌ Tiada program pada tarikh ini.")
 else:
     df_view = df_tarikh_dicari[['Tarikh', 'Aktiviti', 'Tempat']].copy()
     df_view['Tarikh'] = df_view['Tarikh'].dt.strftime('%d %b %Y')
+    df_view.reset_index(drop=True, inplace=True)
     df_view.index += 1
     df_view.index.name = 'Bil'
     st.dataframe(df_view, use_container_width=True)
 
-# Footer
-st.markdown("""<div class="footer">
-<b>DIBANGUNKAN OLEH JABATAN SETIAUSAHA DPPKR </b><br>
-<span>&#128231;</span> <a href="mailto:dppkrembau@gmail.com">Email</a> |
-<span>&#128279;</span> <a href="https://facebook.com/pemudapasrembau" target="_blank">Facebook</a><br>
-<span>&#128222;</span> SU : <a href="tel:+60136343231">HAKIM</a> |
-<span>&#128172;</span> <a href="https://wa.me/60136343231" target="_blank">WhatsApp</a><br>
-<span>&#128222;</span> PSU 1: <a href="tel:+60173607925">NAIM</a> |
-<span>&#128172;</span> <a href="https://wa.me/60173607925" target="_blank">WhatsApp</a></div>""", unsafe_allow_html=True)
+st.markdown("""
+    <style>
+    .stAlert {
+        background-color: #006e3c !important;
+        color: white !important;
+        border-left: 0.5rem solid white !important;
+    }
+    .stAlert > div {
+        color: white !important;
+        font-weight: normal;
+    }
+    .stAlert svg {
+        fill: white !important;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+footer_style = """
+    <style>
+    .footer {
+        background-color: #006e3c;
+        color: white;
+        padding: 15px 10px;
+        text-align: center;
+        font-size: 0.9rem;
+        margin-top: 30px;
+        border-radius: 5px;
+    }
+    .footer a {
+        color: #90ee90;
+        text-decoration: none;
+        margin: 0 8px;
+    }
+    .footer a:hover {
+        text-decoration: underline;
+    }
+    </style>
+"""
+
+footer_html = """
+<div class="footer">
+    <b>DIBANGUNKAN OLEH JABATAN SETIAUSAHA DPPKR </b><br>
+    <span>&#128231;</span> <a href="mailto:dppkrembau@gmail.com">Email</a> |
+    <span>&#128279;</span> <a href="https://facebook.com/pemudapasrembau" target="_blank">Facebook </a><br> 
+    <span>&#128222;</span> SU : <a href="tel:+60136343231">HAKIM</a> |
+    <span>&#128172;</span> <a href="https://wa.me/60136343231" target="_blank">WhatsApp</a><br>
+    <span>&#128222;</span> PSU 1: <a href="tel:+60173607925">NAIM</a> |
+    <span>&#128172;</span> <a href="https://wa.me/60173607925" target="_blank">WhatsApp</a>
+</div>
+"""
+
+st.markdown(footer_style + footer_html, unsafe_allow_html=True)
+
+st.markdown("""
+    <style>
+    .element-container .stMetric label, .element-container .stMetric div {
+        color: white !important;
+    }
+    .stMetric {
+        background-color: #004d2a;
+        padding: 10px;
+        border-radius: 10px;
+    }
+    </style>
+""", unsafe_allow_html=True)
