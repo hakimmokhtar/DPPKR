@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import datetime
 from urllib.parse import quote
-import streamlit as st
 
 # --- ✅ Background Hijau PAS ---
 st.markdown(
@@ -19,26 +18,32 @@ st.markdown(
 
 st.markdown("""
     <style>
-    .my_table {
-        background-color: #e6f2e6;
-        color: black;
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 16px;
+    .stApp, .stMarkdown, .stSelectbox label, .stDateInput label,
+    .stDataFrame, .stMetric, .stTextInput, .stButton, .stNumberInput label {
+        color: white !important;
     }
-    .my_table th {
-        background-color: #cce5cc;
-        color: black;
-        padding: 8px;
-        text-align: left;
+    h1, h2, h3, h4, h5, h6 {
+        color: white !important;
     }
-    .my_table td {
-        background-color: #e6f2e6;
-        color: black;
-        padding: 8px;
+    .css-1d391kg { color: white !important; }
+    .stSelectbox div[data-baseweb="select"],
+    .stDateInput input {
+        background-color: #004d2a !important;
+        color: white !important;
+    }
+
+    /* ✅ UPDATE WARNA TULISAN JADUAL */
+    .dataframe th {
+        background-color: #cce5cc !important;
+        color: black !important;
+    }
+    .dataframe td {
+        background-color: #e6f2e6 !important;
+        color: black !important;
     }
     </style>
 """, unsafe_allow_html=True)
+
 
 st.image("LOGO DPPM.png", width=700)
 
@@ -124,11 +129,7 @@ with st.container():
             df_papar.reset_index(drop=True, inplace=True)
             df_papar.index += 1
             df_papar.index.name = 'Bil'
-            st.markdown(
-            df_papar.to_html(index=True, classes='my_table', border=0, justify='center'),
-            unsafe_allow_html=True
-)
-
+            st.dataframe(df_papar, use_container_width=True)
 
 
     if col3.button(f"📅 Akan Datang\n({jumlah_program_akan_datang})"):
