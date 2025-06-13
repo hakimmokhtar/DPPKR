@@ -59,10 +59,7 @@ def load_data():
 
 df = load_data()
 
-# Tarikh hari ini
 today = datetime.date.today()
-
-# Program hari ini
 program_hari_ini = df[df['Tarikh'].dt.date == today]
 
 if not program_hari_ini.empty:
@@ -83,27 +80,36 @@ if not program_hari_ini.empty:
         unsafe_allow_html=True
     )
 
-    mesej_wa_hari_ini = f"*Program Hari Ini ({today.strftime('%A, %d %B %Y')})*\n"
+    if len(aktiviti_list) == 1:
+        st.toast(f"📢 Program Hari Ini: {aktiviti_list[0]}", icon="📌")
+    else:
+        st.toast(f"📢 {len(aktiviti_list)} Program Hari Ini!", icon="📌")
+        for aktiviti in aktiviti_list:
+            st.toast(f"📌 {aktiviti}")
+
+    mesej_wa = f"*Program Hari Ini ({today.strftime('%A, %d %B %Y')})*\n"
     for aktiviti, tempat in zip(aktiviti_list, tempat_list):
-        mesej_wa_hari_ini += f"📌 {aktiviti}\n📍 {tempat}\n\n"
+        mesej_wa += f"📌 {aktiviti}\n📍 {tempat}\n\n"
 
-    pautan_wa_hari_ini = f"https://wa.me/?text={quote(mesej_wa_hari_ini)}"
-    st.markdown(f"[📤 Kongsi Program Hari Ini ke WhatsApp]({pautan_wa_hari_ini})", unsafe_allow_html=True)
+    pautan_wa = f"https://wa.me/?text={quote(mesej_wa)}"
+    st.markdown(f"[📤 Kongsi ke WhatsApp]({pautan_wa})", unsafe_allow_html=True)
 
-# Butang metrik dan fungsi klik
+# --- Semua Program ke WhatsApp ---
+mesej_all = "*📅 Semua Program DPPKR 2025-2027*\n\n"
+for i, row in df.iterrows():
+    mesej_all += f"📆 {row['Tarikh'].strftime('%d/%m/%Y')}\n📌 {row['Aktiviti']}\n📍 {row['Tempat']}\n\n"
+link_all = f"https://wa.me/?text={quote(mesej_all)}"
+st.markdown(f"[📤 Kongsi Semua Program ke WhatsApp]({link_all})", unsafe_allow_html=True)
+
 jumlah_program = len(df)
 jumlah_program_hari_ini = len(program_hari_ini)
 jumlah_program_akan_datang = len(df[df['Tarikh'].dt.date > today])
-jumlah_program_selesai = len(df[df['Tarikh'].dt.date < today])
 
-# Pilihan tahun
-tahun_list = sorted(
-    [int(t) for t in df['Tahun'].dropna().unique() if 2025 <= t <= 2027],
-    reverse=True
-)
+tahun_list = sorted([int(t) for t in df['Tahun'].dropna().unique() if 2025 <= t <= 2027], reverse=True)
 tahun_dipilih = st.selectbox("Pilih Tahun", tahun_list)
 
 jumlah_program_tahun_ini = len(df[df['Tahun'] == tahun_dipilih])
+jumlah_program_selesai = len(df[df['Tarikh'].dt.date < today])
 
 with st.container():
     col1, col2, col3, col4, col5 = st.columns(5)
@@ -118,7 +124,12 @@ with st.container():
 
     if col2.button(f"📌 Program Hari Ini\n({jumlah_program_hari_ini})"):
         with st.expander("📋 Senarai Program Hari Ini", expanded=True):
-            st.dataframe(df_papar, use_container_width=True)
+            df_today = program_hari_ini[['Tarikh', 'Aktiviti', 'Tempat']].copy()
+            df_today['Tarikh'] = df_today['Tarikh'].dt.strftime('%d %b %Y')
+            df_today.reset_index(drop=True, inplace=True)
+            df_today.index += 1
+            df_today.index.name = 'Bil'
+            st.dataframe(df_today, use_container_width=True)
 
     if col3.button(f"📅 Akan Datang\n({jumlah_program_akan_datang})"):
         with st.expander("📋 Program Akan Datang", expanded=True):
@@ -146,6 +157,8 @@ with st.container():
             df_done.index += 1
             df_done.index.name = 'Bil'
             st.dataframe(df_done, use_container_width=True)
+
+# (Bahagian lain kekal sama: Pilih bulan, jadual, footer, dll)
 
 
 # Butang kongsi semua program ke WhatsApp
