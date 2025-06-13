@@ -17,8 +17,6 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-
-
 st.markdown("""
     <style>
     .my_table {
@@ -38,20 +36,6 @@ st.markdown("""
         background-color: #e6f2e6;
         color: black;
         padding: 8px;
-    }
-    </style>
-""", unsafe_allow_html=True)
-# CSS untuk kotak
-st.markdown("""
-    <style>
-    .box-container {
-        background-color: white;
-        color: black;
-        padding: 20px;
-        border-radius: 20px;
-        text-align: center;
-        font-size: 24px;
-        box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
     }
     </style>
 """, unsafe_allow_html=True)
