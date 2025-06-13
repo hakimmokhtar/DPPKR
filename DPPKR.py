@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import datetime
 from urllib.parse import quote
+import streamlit as st
 
 # --- ✅ Background Hijau PAS ---
 st.markdown(
@@ -44,7 +45,52 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
+st.markdown("""
+    <style>
+    .my_table {
+        background-color: #e6f2e6;
+        color: black;
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 16px;
+    }
+    .my_table th {
+        background-color: #cce5cc;
+        color: black;
+        padding: 8px;
+        text-align: left;
+    }
+    .my_table td {
+        background-color: #e6f2e6;
+        color: black;
+        padding: 8px;
+    }
+    </style>
+""", unsafe_allow_html=True)
+# CSS untuk kotak
+st.markdown("""
+    <style>
+    .box-container {
+        background-color: white;
+        color: black;
+        padding: 20px;
+        border-radius: 20px;
+        text-align: center;
+        font-size: 24px;
+        box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+    }
+    </style>
+""", unsafe_allow_html=True)
 
+# Paparan dalam baris
+cols = st.columns(5)
+
+icons = ["📊", "📌", "📅", "🗓️", "✅"]
+labels = ["Statistik", "Program Akan Datang", "Takwim", "Senarai Program", "Selesai"]
+
+for col, icon, label in zip(cols, icons, labels):
+    with col:
+        st.markdown(f'<div class="box-container">{icon}<br><span>{label}</span></div>', unsafe_allow_html=True)
 st.image("LOGO DPPM.png", width=700)
 
 st.title("DEWAN PEMUDA PAS KAWASAN REMBAU 2025-2027")
@@ -129,7 +175,11 @@ with st.container():
             df_papar.reset_index(drop=True, inplace=True)
             df_papar.index += 1
             df_papar.index.name = 'Bil'
-            st.dataframe(df_papar, use_container_width=True)
+            st.markdown(
+            df_papar.to_html(index=True, classes='my_table', border=0, justify='center'),
+            unsafe_allow_html=True
+)
+
 
 
     if col3.button(f"📅 Akan Datang\n({jumlah_program_akan_datang})"):
@@ -187,18 +237,6 @@ else:
     df_papar.index += 1
     df_papar.index.name = 'Bil'
     st.dataframe(df_papar, use_container_width=True)
-
-# 📤 JANA MESEJ WHATSAPP UNTUK AKTIVITI BULAN DIPILIH
-if not df_tapis.empty:
-    mesej_bulan = f"*📆 SENARAI PROGRAM BULAN {bulan_dipilih_nama.upper()} {tahun_dipilih}*"
-    for idx, row in df_tapis.iterrows():
-        tarikh_str = row['Tarikh'].strftime('%d/%m/%Y')
-        mesej_bulan += f"\n\n➡️ {tarikh_str}\n📌 {row['Aktiviti']}\n📍 {row['Tempat']}"
-
-    mesej_bulan_encoded = quote(mesej_bulan)
-    pautan_wa_bulan = f"https://wa.me/?text={mesej_bulan_encoded}"
-
-    st.markdown(f"[📤 Kongsi Program Bulan Ini ke WhatsApp]({pautan_wa_bulan})", unsafe_allow_html=True)
 
 st.markdown("## 📅 Program Yang Terdekat")
 df_akan_datang = df[df['Tarikh'].dt.date >= today].sort_values('Tarikh').head(3)
