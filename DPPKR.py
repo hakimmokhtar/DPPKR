@@ -59,7 +59,10 @@ def load_data():
 
 df = load_data()
 
+# Tarikh hari ini
 today = datetime.date.today()
+
+# Program hari ini
 program_hari_ini = df[df['Tarikh'].dt.date == today]
 
 if not program_hari_ini.empty:
@@ -80,24 +83,20 @@ if not program_hari_ini.empty:
         unsafe_allow_html=True
     )
 
-    if len(aktiviti_list) == 1:
-        st.toast(f"📢 Program Hari Ini: {aktiviti_list[0]}", icon="📌")
-    else:
-        st.toast(f"📢 {len(aktiviti_list)} Program Hari Ini!", icon="📌")
-        for aktiviti in aktiviti_list:
-            st.toast(f"📌 {aktiviti}")
-
-    mesej_wa = f"*Program Hari Ini ({today.strftime('%A, %d %B %Y')})*\n"
+    mesej_wa_hari_ini = f"*Program Hari Ini ({today.strftime('%A, %d %B %Y')})*\n"
     for aktiviti, tempat in zip(aktiviti_list, tempat_list):
-        mesej_wa += f"📌 {aktiviti}\n📍 {tempat}\n\n"
+        mesej_wa_hari_ini += f"📌 {aktiviti}\n📍 {tempat}\n\n"
 
-    pautan_wa = f"https://wa.me/?text={quote(mesej_wa)}"
-    st.markdown(f"[📤 Kongsi ke WhatsApp]({pautan_wa})", unsafe_allow_html=True)
+    pautan_wa_hari_ini = f"https://wa.me/?text={quote(mesej_wa_hari_ini)}"
+    st.markdown(f"[📤 Kongsi Program Hari Ini ke WhatsApp]({pautan_wa_hari_ini})", unsafe_allow_html=True)
 
+# Butang metrik dan fungsi klik
 jumlah_program = len(df)
 jumlah_program_hari_ini = len(program_hari_ini)
 jumlah_program_akan_datang = len(df[df['Tarikh'].dt.date > today])
+jumlah_program_selesai = len(df[df['Tarikh'].dt.date < today])
 
+# Pilihan tahun
 tahun_list = sorted(
     [int(t) for t in df['Tahun'].dropna().unique() if 2025 <= t <= 2027],
     reverse=True
@@ -105,15 +104,36 @@ tahun_list = sorted(
 tahun_dipilih = st.selectbox("Pilih Tahun", tahun_list)
 
 jumlah_program_tahun_ini = len(df[df['Tahun'] == tahun_dipilih])
-jumlah_program_selesai = len(df[df['Tarikh'].dt.date < today])
 
 col1, col2, col3, col4, col5 = st.columns(5)
-col1.metric("Jumlah Program", jumlah_program)
-col2.metric("Program Hari Ini", jumlah_program_hari_ini)
-col3.metric("Akan Datang", jumlah_program_akan_datang)
-col4.metric(f"Program {tahun_dipilih}", jumlah_program_tahun_ini)
-col5.metric("Program Selesai", jumlah_program_selesai)
+if col1.button("📊 Jumlah Program"):
+    st.subheader("📋 Senarai Semua Program")
+    st.dataframe(df[['Tarikh', 'Aktiviti', 'Tempat']])
+if col2.button("📅 Program Hari Ini"):
+    st.subheader("📋 Program Hari Ini")
+    st.dataframe(program_hari_ini[['Tarikh', 'Aktiviti', 'Tempat']])
+if col3.button("⏳ Akan Datang"):
+    st.subheader("📋 Program Akan Datang")
+    df_akan_datang = df[df['Tarikh'].dt.date > today]
+    st.dataframe(df_akan_datang[['Tarikh', 'Aktiviti', 'Tempat']])
+if col4.button(f"📆 Program {tahun_dipilih}"):
+    st.subheader(f"📋 Program Tahun {tahun_dipilih}")
+    df_tahun_ini = df[df['Tahun'] == tahun_dipilih]
+    st.dataframe(df_tahun_ini[['Tarikh', 'Aktiviti', 'Tempat']])
+if col5.button("✅ Program Selesai"):
+    st.subheader("📋 Program Selesai")
+    df_selesai = df[df['Tarikh'].dt.date < today]
+    st.dataframe(df_selesai[['Tarikh', 'Aktiviti', 'Tempat']])
 
+# Butang kongsi semua program ke WhatsApp
+mesej_semua_program = "*📋 Senarai Semua Program DPPKR 2025–2027*\n"
+for _, row in df.iterrows():
+    mesej_semua_program += f"📅 {row['Tarikh'].strftime('%d/%m/%Y')}\n📌 {row['Aktiviti']}\n📍 {row['Tempat']}\n\n"
+
+pautan_wa_semua = f"https://wa.me/?text={quote(mesej_semua_program)}"
+st.markdown(f"[📤 Kongsi Semua Program ke WhatsApp]({pautan_wa_semua})", unsafe_allow_html=True)
+
+# Penapis ikut bulan
 bulan_penuh = [
     ('Januari', 1), ('Februari', 2), ('Mac', 3), ('April', 4),
     ('Mei', 5), ('Jun', 6), ('Julai', 7), ('Ogos', 8),
@@ -124,10 +144,8 @@ bulan_nama_list = [b[0] for b in bulan_penuh]
 bulan_nombor_list = [b[1] for b in bulan_penuh]
 
 bulan_dipilih_nama = st.selectbox("Pilih Bulan", bulan_nama_list)
-bulan_dipilih_index = bulan_nama_list.index(bulan_dipilih_nama)
-bulan_dipilih_num = bulan_nombor_list[bulan_dipilih_index]
+bulan_dipilih_num = bulan_nombor_list[bulan_nama_list.index(bulan_dipilih_nama)]
 
-df['BulanNum'] = df['Tarikh'].dt.month
 df_tapis = df[(df['Tahun'] == tahun_dipilih) & (df['BulanNum'] == bulan_dipilih_num)]
 
 st.markdown(f"## 📌 Jadual Aktiviti Bulan {bulan_dipilih_nama} {tahun_dipilih}")
@@ -142,60 +160,22 @@ else:
     df_papar.index.name = 'Bil'
     st.dataframe(df_papar, use_container_width=True)
 
-    # Tambah fungsi kongsi semua program bulan ini ke WhatsApp
-    mesej_semua = f"*Program Bulan {bulan_dipilih_nama} {tahun_dipilih}*\n\n"
-    for idx, row in df_tapis.iterrows():
-        mesej_semua += f"📅 {row['Tarikh'].strftime('%d %b %Y')}\n📌 {row['Aktiviti']}\n📍 {row['Tempat']}\n\n"
-
-    pautan_semua = f"https://wa.me/?text={quote(mesej_semua)}"
-    st.markdown(f"[📤 Kongsi Semua Program Bulan Ini ke WhatsApp]({pautan_semua})", unsafe_allow_html=True)
-
-st.markdown("## 📅 Program Yang Terdekat")
-df_akan_datang = df[df['Tarikh'].dt.date >= today].sort_values('Tarikh').head(3)
-
-if df_akan_datang.empty:
-    st.info("❌ Tiada program akan datang setakat ini.")
-else:
-    df_prog_akan_datang = df_akan_datang[['Tarikh', 'Aktiviti', 'Tempat']].copy()
-    df_prog_akan_datang['Tarikh'] = df_prog_akan_datang['Tarikh'].dt.strftime('%A, %d %B %Y')
-    df_prog_akan_datang.reset_index(drop=True, inplace=True)
-    df_prog_akan_datang.index += 1
-    df_prog_akan_datang.index.name = 'Bil'
-    st.dataframe(df_prog_akan_datang, use_container_width=True)
-
-tarikh_dicari = st.date_input("📆 Pilih Tarikh Untuk Lihat Program", today)
-df_tarikh_dicari = df[df['Tarikh'].dt.date == tarikh_dicari]
-
-st.markdown(f"## 🔍 Program Pada {tarikh_dicari.strftime('%A, %d %B %Y')}")
-
-if df_tarikh_dicari.empty:
+# Carian ikut tarikh
+st.markdown("## 🔍 Program Mengikut Tarikh")
+tarikh_dicari = st.date_input("📆 Pilih Tarikh", today)
+df_dicari = df[df['Tarikh'].dt.date == tarikh_dicari]
+if df_dicari.empty:
     st.info("❌ Tiada program pada tarikh ini.")
 else:
-    df_view = df_tarikh_dicari[['Tarikh', 'Aktiviti', 'Tempat']].copy()
-    df_view['Tarikh'] = df_view['Tarikh'].dt.strftime('%d %b %Y')
-    df_view.reset_index(drop=True, inplace=True)
-    df_view.index += 1
-    df_view.index.name = 'Bil'
-    st.dataframe(df_view, use_container_width=True)
+    df_carian = df_dicari[['Tarikh', 'Aktiviti', 'Tempat']].copy()
+    df_carian['Tarikh'] = df_carian['Tarikh'].dt.strftime('%d %b %Y')
+    df_carian.reset_index(drop=True, inplace=True)
+    df_carian.index += 1
+    df_carian.index.name = 'Bil'
+    st.dataframe(df_carian, use_container_width=True)
 
+# Footer
 st.markdown("""
-    <style>
-    .stAlert {
-        background-color: #006e3c !important;
-        color: white !important;
-        border-left: 0.5rem solid white !important;
-    }
-    .stAlert > div {
-        color: white !important;
-        font-weight: normal;
-    }
-    .stAlert svg {
-        fill: white !important;
-    }
-    </style>
-""", unsafe_allow_html=True)
-
-footer_style = """
     <style>
     .footer {
         background-color: #006e3c;
@@ -215,9 +195,7 @@ footer_style = """
         text-decoration: underline;
     }
     </style>
-"""
-
-footer_html = """
+""" + """
 <div class="footer">
     <b>DIBANGUNKAN OLEH JABATAN SETIAUSAHA DPPKR </b><br>
     <span>&#128231;</span> <a href="mailto:dppkrembau@gmail.com">Email</a> |
@@ -227,19 +205,4 @@ footer_html = """
     <span>&#128222;</span> PSU 1: <a href="tel:+60173607925">NAIM</a> |
     <span>&#128172;</span> <a href="https://wa.me/60173607925" target="_blank">WhatsApp</a>
 </div>
-"""
-
-st.markdown(footer_style + footer_html, unsafe_allow_html=True)
-
-st.markdown("""
-    <style>
-    .element-container .stMetric label, .element-container .stMetric div {
-        color: white !important;
-    }
-    .stMetric {
-        background-color: #004d2a;
-        padding: 10px;
-        border-radius: 10px;
-    }
-    </style>
 """, unsafe_allow_html=True)
