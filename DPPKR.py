@@ -211,7 +211,7 @@ footer_style = """
 
 footer_html = """
 <div class="footer">
-    <b>DISEDIAKAN OLEH JABATAN SETIAUSAHA DPPKR 25-27</b><br>
+    <b>DIBANGUNKAN OLEH JABATAN SETIAUSAHA DPPKR </b><br>
     <span>&#128231;</span> <a href="mailto:dppkrembau@gmail.com">Email</a> |
     <span>&#128279;</span> <a href="https://facebook.com/pemudapasrembau" target="_blank">Facebook </a><br> 
     <span>&#128222;</span> SU : <a href="tel:+60136343231">HAKIM</a> |
