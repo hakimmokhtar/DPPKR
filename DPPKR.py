@@ -40,9 +40,6 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-for col, icon, label in zip(cols, icons, labels):
-    with col:
-        st.markdown(f'<div class="box-container">{icon}<br><span>{label}</span></div>', unsafe_allow_html=True)
 st.image("LOGO DPPM.png", width=700)
 
 st.title("DEWAN PEMUDA PAS KAWASAN REMBAU 2025-2027")
