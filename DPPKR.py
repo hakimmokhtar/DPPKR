@@ -188,6 +188,13 @@ else:
     df_papar.index.name = 'Bil'
     st.dataframe(df_papar, use_container_width=True)
 
+    mesej_bulanan = f"*Program Bulan {bulan_dipilih_nama} {tahun_dipilih}*\n\n"
+    for i, row in df_papar.iterrows():
+        mesej_bulanan += f"{i}. 📌 {row['Aktiviti']}\n📍 {row['Tempat']}\n🗓️ {row['Tarikh']}\n\n"
+
+    pautan_bulanan_wa = f"https://wa.me/?text={quote(mesej_bulanan)}"
+    st.markdown(f"[📤 Kongsi Program Bulanan ke WhatsApp]({pautan_bulanan_wa})", unsafe_allow_html=True)
+
 st.markdown("## 📅 Program Yang Terdekat")
 df_akan_datang = df[df['Tarikh'].dt.date >= today].sort_values('Tarikh').head(3)
 
