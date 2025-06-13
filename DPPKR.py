@@ -161,7 +161,7 @@ else:
 # --- ✅ Program Akan Datang ---
 
 st.markdown("## 📅 Program Yang Terdekat")
-df_akan_datang = df[df['Tarikh'].dt.date > datetime.date.today()].sort_values('Tarikh').head(3)
+df_akan_datang = df[df['Tarikh'].dt.date >= datetime.date.today()].sort_values('Tarikh').head(3)
 
 if df_akan_datang.empty:
     st.info("❌ Tiada program akan datang setakat ini.")
