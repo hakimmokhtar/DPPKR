@@ -129,7 +129,11 @@ with st.container():
             df_papar.reset_index(drop=True, inplace=True)
             df_papar.index += 1
             df_papar.index.name = 'Bil'
-            st.dataframe(df_papar, use_container_width=True)
+            st.markdown(
+            df_papar.to_html(index=True, classes='my_table', border=0, justify='center'),
+            unsafe_allow_html=True
+)
+
 
 
     if col3.button(f"📅 Akan Datang\n({jumlah_program_akan_datang})"):
