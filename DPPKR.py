@@ -105,25 +105,48 @@ tahun_dipilih = st.selectbox("Pilih Tahun", tahun_list)
 
 jumlah_program_tahun_ini = len(df[df['Tahun'] == tahun_dipilih])
 
-col1, col2, col3, col4, col5 = st.columns(5)
-if col1.button("📊 Jumlah Program"):
-    st.subheader("📋 Senarai Semua Program")
-    st.dataframe(df[['Tarikh', 'Aktiviti', 'Tempat']])
-if col2.button("📅 Program Hari Ini"):
-    st.subheader("📋 Program Hari Ini")
-    st.dataframe(program_hari_ini[['Tarikh', 'Aktiviti', 'Tempat']])
-if col3.button("⏳ Akan Datang"):
-    st.subheader("📋 Program Akan Datang")
-    df_akan_datang = df[df['Tarikh'].dt.date > today]
-    st.dataframe(df_akan_datang[['Tarikh', 'Aktiviti', 'Tempat']])
-if col4.button(f"📆 Program {tahun_dipilih}"):
-    st.subheader(f"📋 Program Tahun {tahun_dipilih}")
-    df_tahun_ini = df[df['Tahun'] == tahun_dipilih]
-    st.dataframe(df_tahun_ini[['Tarikh', 'Aktiviti', 'Tempat']])
-if col5.button("✅ Program Selesai"):
-    st.subheader("📋 Program Selesai")
-    df_selesai = df[df['Tarikh'].dt.date < today]
-    st.dataframe(df_selesai[['Tarikh', 'Aktiviti', 'Tempat']])
+with st.container():
+    col1, col2, col3, col4, col5 = st.columns(5)
+    if col1.button(f"📊 Jumlah Program\n({jumlah_program})"):
+        with st.expander("📋 Senarai Semua Program", expanded=True):
+            df_all = df[['Tarikh', 'Aktiviti', 'Tempat']].copy()
+            df_all['Tarikh'] = df_all['Tarikh'].dt.strftime('%d %b %Y')
+            df_all.reset_index(drop=True, inplace=True)
+            df_all.index += 1
+            df_all.index.name = 'Bil'
+            st.dataframe(df_all, use_container_width=True)
+
+    if col2.button(f"📌 Program Hari Ini\n({jumlah_program_hari_ini})"):
+        with st.expander("📋 Senarai Program Hari Ini", expanded=True):
+            st.dataframe(df_papar, use_container_width=True)
+
+    if col3.button(f"📅 Akan Datang\n({jumlah_program_akan_datang})"):
+        with st.expander("📋 Program Akan Datang", expanded=True):
+            df_future = df[df['Tarikh'].dt.date > today][['Tarikh', 'Aktiviti', 'Tempat']].copy()
+            df_future['Tarikh'] = df_future['Tarikh'].dt.strftime('%d %b %Y')
+            df_future.reset_index(drop=True, inplace=True)
+            df_future.index += 1
+            df_future.index.name = 'Bil'
+            st.dataframe(df_future, use_container_width=True)
+
+    if col4.button(f"📆 Program {tahun_dipilih}\n({jumlah_program_tahun_ini})"):
+        with st.expander(f"📋 Senarai Program Tahun {tahun_dipilih}", expanded=True):
+            df_year = df[df['Tahun'] == tahun_dipilih][['Tarikh', 'Aktiviti', 'Tempat']].copy()
+            df_year['Tarikh'] = df_year['Tarikh'].dt.strftime('%d %b %Y')
+            df_year.reset_index(drop=True, inplace=True)
+            df_year.index += 1
+            df_year.index.name = 'Bil'
+            st.dataframe(df_year, use_container_width=True)
+
+    if col5.button(f"✅ Program Selesai\n({jumlah_program_selesai})"):
+        with st.expander("📋 Program Telah Selesai", expanded=True):
+            df_done = df[df['Tarikh'].dt.date < today][['Tarikh', 'Aktiviti', 'Tempat']].copy()
+            df_done['Tarikh'] = df_done['Tarikh'].dt.strftime('%d %b %Y')
+            df_done.reset_index(drop=True, inplace=True)
+            df_done.index += 1
+            df_done.index.name = 'Bil'
+            st.dataframe(df_done, use_container_width=True)
+
 
 # Butang kongsi semua program ke WhatsApp
 mesej_semua_program = "*📋 Senarai Semua Program DPPKR 2025–2027*\n"
