@@ -129,7 +129,7 @@ else:
 
 # --- ✅ Program Akan Datang ---
 
-st.markdown("## 📅 Program Akan Datang")
+st.markdown("## 📅 Program Yang Terdekat")
 df_akan_datang = df[df['Tarikh'].dt.date > datetime.date.today()].sort_values('Tarikh').head(3)
 
 if df_akan_datang.empty:
