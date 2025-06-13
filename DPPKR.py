@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import datetime
 from urllib.parse import quote
+import streamlit as st
 
 # --- ✅ Background Hijau PAS ---
 st.markdown(
@@ -66,7 +67,30 @@ st.markdown("""
     }
     </style>
 """, unsafe_allow_html=True)
+# CSS untuk kotak
+st.markdown("""
+    <style>
+    .box-container {
+        background-color: white;
+        color: black;
+        padding: 20px;
+        border-radius: 20px;
+        text-align: center;
+        font-size: 24px;
+        box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+    }
+    </style>
+""", unsafe_allow_html=True)
 
+# Paparan dalam baris
+cols = st.columns(5)
+
+icons = ["📊", "📌", "📅", "🗓️", "✅"]
+labels = ["Statistik", "Program Akan Datang", "Takwim", "Senarai Program", "Selesai"]
+
+for col, icon, label in zip(cols, icons, labels):
+    with col:
+        st.markdown(f'<div class="box-container">{icon}<br><span>{label}</span></div>', unsafe_allow_html=True)
 st.image("LOGO DPPM.png", width=700)
 
 st.title("DEWAN PEMUDA PAS KAWASAN REMBAU 2025-2027")
