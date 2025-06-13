@@ -42,6 +42,32 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
+st.markdown("""
+    <style>
+    /* Gaya Metric Box untuk nampak lebih jelas */
+    .stMetric {
+        background-color: #004d2a;
+        padding: 10px;
+        border-radius: 10px;
+        text-align: center;
+    }
+
+    .stMetric > div {
+        color: white !important;
+        font-weight: bold;
+        font-size: 16px;
+    }
+
+    /* Teks alert/info untuk lebih ketara */
+    .stAlert[data-testid="stNotificationContentWarning"] {
+        background-color: #ffcccc !important;
+        color: red !important;
+        font-weight: bold !important;
+        border-left: 5px solid red !important;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
 st.image("LOGO DPPM.png", width=700)
 
 st.title("DEWAN PEMUDA PAS KAWASAN REMBAU 2025-2027")
