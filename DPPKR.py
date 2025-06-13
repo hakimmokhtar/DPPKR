@@ -44,6 +44,28 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
+st.markdown("""
+    <style>
+    .my_table {
+        background-color: #e6f2e6;
+        color: black;
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 16px;
+    }
+    .my_table th {
+        background-color: #cce5cc;
+        color: black;
+        padding: 8px;
+        text-align: left;
+    }
+    .my_table td {
+        background-color: #e6f2e6;
+        color: black;
+        padding: 8px;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
 st.image("LOGO DPPM.png", width=700)
 
