@@ -72,6 +72,23 @@ def load_data():
 
 df = load_data()
 
+# --- ✅ Notifikasi Jika Ada Program Hari Ini ---
+today = datetime.date.today()
+program_hari_ini = df[df['Tarikh'].dt.date == today]
+
+if not program_hari_ini.empty:
+    aktiviti_list = program_hari_ini['Aktiviti'].tolist()
+    senarai_program = "<ul>" + "".join(f"<li>{aktiviti}</li>" for aktiviti in aktiviti_list) + "</ul>"
+    st.markdown(
+        f"""
+        <div style="background-color:#004d2a; padding:20px; border-radius:10px; border-left:8px solid #ffffff">
+            <h4 style="color:white;">📢 <u>Program Hari Ini ({today.strftime('%A, %d %B %Y')}):</u></h4>
+            {senarai_program}
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
 # --- ✅ Statistik Ringkas ---
 jumlah_program = len(df)
 program_hari_ini = df[df['Tarikh'].dt.date == datetime.date.today()]
