@@ -67,10 +67,9 @@ today = datetime.date.today()
 program_hari_ini = df[df['Tarikh'].dt.date == today]
 
 if not program_hari_ini.empty:
-    aktiviti_tempat_list = program_hari_ini[['Aktiviti', 'Tempat']].values.tolist()
-    senarai_program = "<ul>" + "".join(
-    f"<li><b>{aktiviti}</b><br><small>📍 {tempat}</small></li>" for aktiviti, tempat in aktiviti_tempat_list
-) + "</ul>"
+    aktiviti_list = program_hari_ini['Aktiviti'].tolist()
+    senarai_program = "<ul>" + "".join(f"<li>{aktiviti}</li>" for aktiviti in aktiviti_list) + "</ul>"
+
 
     st.markdown(
         f"""
