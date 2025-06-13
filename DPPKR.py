@@ -40,12 +40,6 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Paparan dalam baris
-cols = st.columns(5)
-
-icons = ["📊", "📌", "📅", "🗓️", "✅"]
-labels = ["Statistik", "Program Akan Datang", "Takwim", "Senarai Program", "Selesai"]
-
 for col, icon, label in zip(cols, icons, labels):
     with col:
         st.markdown(f'<div class="box-container">{icon}<br><span>{label}</span></div>', unsafe_allow_html=True)
