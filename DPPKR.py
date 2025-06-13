@@ -1,270 +1,112 @@
 import streamlit as st
 import pandas as pd
-import datetime
-from urllib.parse import quote
+from datetime import datetime
 
-# --- ✅ Background Hijau PAS ---
-st.markdown(
-    """
-    <style>
-    .stApp {
-        background-color: #006e3c;
-        color: white;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+# Konfigurasi halaman
+st.set_page_config(page_title="Takwim DPPKR", page_icon="📅", layout="wide")
 
+# CSS untuk gaya tersuai
 st.markdown("""
     <style>
-    .stApp, .stMarkdown, .stSelectbox label, .stDateInput label,
-    .stDataFrame, .stMetric, .stTextInput, .stButton, .stNumberInput label {
-        color: white !important;
-    }
-    h1, h2, h3, h4, h5, h6 {
-        color: white !important;
-    }
-    .css-1d391kg { color: white !important; }
-    .stSelectbox div[data-baseweb="select"],
-    .stDateInput input {
-        background-color: #004d2a !important;
-        color: white !important;
-    }
-    .dataframe th {
-        background-color: #004d2a !important;
-        color: white !important;
-    }
-    .dataframe td {
-        color: white !important;
-        background-color: #006e3c !important;
-    }
-    </style>
-""", unsafe_allow_html=True)
-
-st.markdown("""
-    <style>
-    /* Gaya Metric Box untuk nampak lebih jelas */
+    /* Gaya Metric Box */
     .stMetric {
         background-color: #004d2a;
-        padding: 10px;
-        border-radius: 10px;
+        padding: 12px;
+        border-radius: 12px;
         text-align: center;
+        margin-bottom: 10px;
     }
-
     .stMetric > div {
         color: white !important;
         font-weight: bold;
-        font-size: 16px;
+        font-size: 15px;
     }
 
-    /* Teks alert/info untuk lebih ketara */
+    /* Notifikasi tiada aktiviti */
     .stAlert[data-testid="stNotificationContentWarning"] {
-        background-color: #ffcccc !important;
+        background-color: #ffe6e6 !important;
         color: red !important;
         font-weight: bold !important;
-        border-left: 5px solid red !important;
+        border-left: 6px solid red !important;
+    }
+
+    /* Ubah saiz teks metric label */
+    div[data-testid="metric-container"] label {
+        font-size: 15px;
+        font-weight: bold;
+        color: white;
     }
     </style>
 """, unsafe_allow_html=True)
 
-st.image("LOGO DPPM.png", width=700)
+# Data sampel
+program_data = pd.DataFrame({
+    'Tarikh': pd.to_datetime([
+        '2025-05-04', '2025-05-11', '2025-05-14', '2025-05-17',
+        '2025-05-24', '2025-05-28', '2025-05-29', '2025-06-05'
+    ]),
+    'Aktiviti': [
+        'Muktamar DPPKR 2025',
+        'Mesyuarat Exco DPPKR kali 1',
+        'Mesyuarat Exco DPPKR kali 2',
+        'Majlis Hari Guru PASTI Kawasan Rembau',
+        'Himpunan Kedaulatan Ummah',
+        'Serahan Memorandum Bantahan URA',
+        'Smash Pemuda',
+        'Mesyuarat Exco DPPKR kali 3'
+    ],
+    'Tempat': [
+        'Dewan Al Qamar',
+        'Google Meet',
+        'Pusat Khidmat Masyarakat Dun Paroi',
+        'Raden Hall Senawang',
+        'Sogo KL',
+        'Pusat Khidmat Ahli Parlimen Rembau',
+        'Court Seremban Jaya',
+        'Pusat Khidmat Masyarakat Dun Paroi'
+    ]
+})
 
-st.title("DEWAN PEMUDA PAS KAWASAN REMBAU 2025-2027")
+# Dropdown pilih tahun
+st.selectbox("Pilih Tahun", [2025], index=0)
 
-sheet_url = "https://docs.google.com/spreadsheets/d/1qJmyiXVzcmzcfreSdDC1cV0Hr4iVsQcA99On-0NPOck/export?format=csv"
+# Paparan kotak metrik
+col1, col2, col3, col4, col5 = st.columns(5)
+with col1:
+    st.metric("Jumlah Program", f"{len(program_data)} 📅")
+with col2:
+    st.metric("Mesyuarat", f"{program_data['Aktiviti'].str.contains('Mesyuarat').sum()} 📌")
+with col3:
+    st.metric("Aktiviti Luar", f"{program_data['Aktiviti'].str.contains('Himpunan|Smash').sum()} 🏃")
+with col4:
+    st.metric("Tempat Berbeza", f"{program_data['Tempat'].nunique()} 🗺️")
+with col5:
+    st.metric("Program Selesai", f"✅ {len(program_data)}")
 
-def load_data():
-    df = pd.read_csv(sheet_url)
-    df.columns = df.columns.str.strip()
-    df['Tarikh'] = pd.to_datetime(df['Tarikh'], dayfirst=True)
-    df['Tahun'] = df['Tarikh'].dt.year
-    df['Bulan'] = df['Tarikh'].dt.strftime('%B')
-    df['BulanNum'] = df['Tarikh'].dt.month
-    return df.sort_values('Tarikh')
+# Senarai program selesai
+with st.expander("📗 Program Telah Selesai", expanded=True):
+    st.dataframe(program_data.reset_index(drop=True).rename(columns={
+        'Tarikh': 'Tarikh',
+        'Aktiviti': 'Aktiviti',
+        'Tempat': 'Tempat'
+    }), use_container_width=True)
+    st.markdown("📎 [Kongsi Semua Program ke WhatsApp](https://wa.me/?text=Senarai%20Program%20DPPKR%202025)")
 
-df = load_data()
+# Pilihan bulan
+bulan_dict = {
+    "Januari": 1, "Februari": 2, "Mac": 3, "April": 4,
+    "Mei": 5, "Jun": 6, "Julai": 7, "Ogos": 8,
+    "September": 9, "Oktober": 10, "November": 11, "Disember": 12
+}
+pilih_bulan = st.selectbox("Pilih Bulan", list(bulan_dict.keys()))
+bulan_num = bulan_dict[pilih_bulan]
 
-today = datetime.date.today()
-program_hari_ini = df[df['Tarikh'].dt.date == today]
+# Tapisan program untuk bulan dipilih
+program_bulan_ini = program_data[program_data['Tarikh'].dt.month == bulan_num]
 
-if not program_hari_ini.empty:
-    aktiviti_list = program_hari_ini['Aktiviti'].tolist()
-    tempat_list = program_hari_ini['Tempat'].tolist()
-
-    senarai_program = "<ul>" + "".join(
-        f"<li>{aktiviti} - {tempat}</li>" for aktiviti, tempat in zip(aktiviti_list, tempat_list)
-    ) + "</ul>"
-
-    st.markdown(
-        f"""
-        <div style="background-color:#004d2a; padding:20px; border-radius:10px; border-left:8px solid #ffffff">
-            <h4 style="color:white;">📢 <u>Program Hari Ini ({today.strftime('%A, %d %B %Y')}):</u></h4>
-            {senarai_program}
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-
-    if len(aktiviti_list) == 1:
-        st.toast(f"📢 Program Hari Ini: {aktiviti_list[0]}", icon="📌")
-    else:
-        st.toast(f"📢 {len(aktiviti_list)} Program Hari Ini!", icon="📌")
-        for aktiviti in aktiviti_list:
-            st.toast(f"📌 {aktiviti}")
-
-    mesej_wa = f"*Program Hari Ini ({today.strftime('%A, %d %B %Y')})*\n"
-    for aktiviti, tempat in zip(aktiviti_list, tempat_list):
-        mesej_wa += f"📌 {aktiviti}\n📍 {tempat}\n\n"
-
-    pautan_wa = f"https://wa.me/?text={quote(mesej_wa)}"
-    st.markdown(f"[📤 Kongsi ke WhatsApp]({pautan_wa})", unsafe_allow_html=True)
-
-# --- Semua Program ke WhatsApp ---
-mesej_all = "*📅 Semua Program DPPKR 2025-2027*\n\n"
-for i, row in df.iterrows():
-    mesej_all += f"📆 {row['Tarikh'].strftime('%d/%m/%Y')}\n📌 {row['Aktiviti']}\n📍 {row['Tempat']}\n\n"
-link_all = f"https://wa.me/?text={quote(mesej_all)}"
-st.markdown(f"[📤 Kongsi Semua Program ke WhatsApp]({link_all})", unsafe_allow_html=True)
-
-jumlah_program = len(df)
-jumlah_program_hari_ini = len(program_hari_ini)
-jumlah_program_akan_datang = len(df[df['Tarikh'].dt.date > today])
-
-tahun_list = sorted([int(t) for t in df['Tahun'].dropna().unique() if 2025 <= t <= 2027], reverse=True)
-tahun_dipilih = st.selectbox("Pilih Tahun", tahun_list)
-
-jumlah_program_tahun_ini = len(df[df['Tahun'] == tahun_dipilih])
-jumlah_program_selesai = len(df[df['Tarikh'].dt.date < today])
-
-with st.container():
-    col1, col2, col3, col4, col5 = st.columns(5)
-    if col1.button(f"📊 Jumlah Program\n({jumlah_program})"):
-        with st.expander("📋 Senarai Semua Program", expanded=True):
-            df_all = df[['Tarikh', 'Aktiviti', 'Tempat']].copy()
-            df_all['Tarikh'] = df_all['Tarikh'].dt.strftime('%d %b %Y')
-            df_all.reset_index(drop=True, inplace=True)
-            df_all.index += 1
-            df_all.index.name = 'Bil'
-            st.dataframe(df_all, use_container_width=True)
-
-    if col2.button(f"📌 Program Hari Ini\n({jumlah_program_hari_ini})"):
-        with st.expander("📋 Senarai Program Hari Ini", expanded=True):
-            df_today = program_hari_ini[['Tarikh', 'Aktiviti', 'Tempat']].copy()
-            df_today['Tarikh'] = df_today['Tarikh'].dt.strftime('%d %b %Y')
-            df_today.reset_index(drop=True, inplace=True)
-            df_today.index += 1
-            df_today.index.name = 'Bil'
-            st.dataframe(df_today, use_container_width=True)
-
-    if col3.button(f"📅 Akan Datang\n({jumlah_program_akan_datang})"):
-        with st.expander("📋 Program Akan Datang", expanded=True):
-            df_future = df[df['Tarikh'].dt.date > today][['Tarikh', 'Aktiviti', 'Tempat']].copy()
-            df_future['Tarikh'] = df_future['Tarikh'].dt.strftime('%d %b %Y')
-            df_future.reset_index(drop=True, inplace=True)
-            df_future.index += 1
-            df_future.index.name = 'Bil'
-            st.dataframe(df_future, use_container_width=True)
-
-    if col4.button(f"📆 Program {tahun_dipilih}\n({jumlah_program_tahun_ini})"):
-        with st.expander(f"📋 Senarai Program Tahun {tahun_dipilih}", expanded=True):
-            df_year = df[df['Tahun'] == tahun_dipilih][['Tarikh', 'Aktiviti', 'Tempat']].copy()
-            df_year['Tarikh'] = df_year['Tarikh'].dt.strftime('%d %b %Y')
-            df_year.reset_index(drop=True, inplace=True)
-            df_year.index += 1
-            df_year.index.name = 'Bil'
-            st.dataframe(df_year, use_container_width=True)
-
-    if col5.button(f"✅ Program Selesai\n({jumlah_program_selesai})"):
-        with st.expander("📋 Program Telah Selesai", expanded=True):
-            df_done = df[df['Tarikh'].dt.date < today][['Tarikh', 'Aktiviti', 'Tempat']].copy()
-            df_done['Tarikh'] = df_done['Tarikh'].dt.strftime('%d %b %Y')
-            df_done.reset_index(drop=True, inplace=True)
-            df_done.index += 1
-            df_done.index.name = 'Bil'
-            st.dataframe(df_done, use_container_width=True)
-
-# (Bahagian lain kekal sama: Pilih bulan, jadual, footer, dll)
-
-
-# Butang kongsi semua program ke WhatsApp
-mesej_semua_program = "*📋 Senarai Semua Program DPPKR 2025–2027*\n"
-for _, row in df.iterrows():
-    mesej_semua_program += f"📅 {row['Tarikh'].strftime('%d/%m/%Y')}\n📌 {row['Aktiviti']}\n📍 {row['Tempat']}\n\n"
-
-pautan_wa_semua = f"https://wa.me/?text={quote(mesej_semua_program)}"
-st.markdown(f"[📤 Kongsi Semua Program ke WhatsApp]({pautan_wa_semua})", unsafe_allow_html=True)
-
-# Penapis ikut bulan
-bulan_penuh = [
-    ('Januari', 1), ('Februari', 2), ('Mac', 3), ('April', 4),
-    ('Mei', 5), ('Jun', 6), ('Julai', 7), ('Ogos', 8),
-    ('September', 9), ('Oktober', 10), ('November', 11), ('Disember', 12)
-]
-
-bulan_nama_list = [b[0] for b in bulan_penuh]
-bulan_nombor_list = [b[1] for b in bulan_penuh]
-
-bulan_dipilih_nama = st.selectbox("Pilih Bulan", bulan_nama_list)
-bulan_dipilih_num = bulan_nombor_list[bulan_nama_list.index(bulan_dipilih_nama)]
-
-df_tapis = df[(df['Tahun'] == tahun_dipilih) & (df['BulanNum'] == bulan_dipilih_num)]
-
-st.markdown(f"## 📌 Jadual Aktiviti Bulan {bulan_dipilih_nama} {tahun_dipilih}")
-
-if df_tapis.empty:
+# Paparan senarai program bulan dipilih
+st.subheader(f"📌 Jadual Aktiviti Bulan {pilih_bulan} 2025")
+if program_bulan_ini.empty:
     st.info("❌ Tiada aktiviti pada bulan ini.")
 else:
-    df_papar = df_tapis[['Tarikh', 'Aktiviti', 'Tempat']].copy()
-    df_papar['Tarikh'] = df_papar['Tarikh'].dt.strftime('%d %b %Y')
-    df_papar.reset_index(drop=True, inplace=True)
-    df_papar.index += 1
-    df_papar.index.name = 'Bil'
-    st.dataframe(df_papar, use_container_width=True)
-
-# Carian ikut tarikh
-st.markdown("## 🔍 Program Mengikut Tarikh")
-tarikh_dicari = st.date_input("📆 Pilih Tarikh", today)
-df_dicari = df[df['Tarikh'].dt.date == tarikh_dicari]
-if df_dicari.empty:
-    st.info("❌ Tiada program pada tarikh ini.")
-else:
-    df_carian = df_dicari[['Tarikh', 'Aktiviti', 'Tempat']].copy()
-    df_carian['Tarikh'] = df_carian['Tarikh'].dt.strftime('%d %b %Y')
-    df_carian.reset_index(drop=True, inplace=True)
-    df_carian.index += 1
-    df_carian.index.name = 'Bil'
-    st.dataframe(df_carian, use_container_width=True)
-
-# Footer
-st.markdown("""
-    <style>
-    .footer {
-        background-color: #006e3c;
-        color: white;
-        padding: 15px 10px;
-        text-align: center;
-        font-size: 0.9rem;
-        margin-top: 30px;
-        border-radius: 5px;
-    }
-    .footer a {
-        color: #90ee90;
-        text-decoration: none;
-        margin: 0 8px;
-    }
-    .footer a:hover {
-        text-decoration: underline;
-    }
-    </style>
-""" + """
-<div class="footer">
-    <b>DIBANGUNKAN OLEH JABATAN SETIAUSAHA DPPKR </b><br>
-    <span>&#128231;</span> <a href="mailto:dppkrembau@gmail.com">Email</a> |
-    <span>&#128279;</span> <a href="https://facebook.com/pemudapasrembau" target="_blank">Facebook </a><br> 
-    <span>&#128222;</span> SU : <a href="tel:+60136343231">HAKIM</a> |
-    <span>&#128172;</span> <a href="https://wa.me/60136343231" target="_blank">WhatsApp</a><br>
-    <span>&#128222;</span> PSU 1: <a href="tel:+60173607925">NAIM</a> |
-    <span>&#128172;</span> <a href="https://wa.me/60173607925" target="_blank">WhatsApp</a>
-</div>
-""", unsafe_allow_html=True)
+    st.write(program_bulan_ini[['Tarikh', 'Aktiviti', 'Tempat']].reset_index(drop=True))
