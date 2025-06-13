@@ -74,8 +74,6 @@ df = load_data()
 
 # --- ✅ Statistik Ringkas ---
 jumlah_program = len(df)
-program_hari_ini = df[df['Tarikh'].dt.date == datetime.date.today()]
-jumlah_program_hari_ini = len(program_hari_ini)
 jumlah_program_akan_datang = len(df[df['Tarikh'].dt.date > datetime.date.today()])
 
 # --- ✅ Dropdown Tahun ---
