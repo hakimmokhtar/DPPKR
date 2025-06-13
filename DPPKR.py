@@ -41,16 +41,12 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# --- ✅ Logo ---
 st.image("LOGO DPPM.png", width=700)
 
-# --- ✅ Tajuk Aplikasi ---
 st.title("DEWAN PEMUDA PAS KAWASAN REMBAU 2025-2027")
 
-# --- ✅ Google Sheet URL ---
 sheet_url = "https://docs.google.com/spreadsheets/d/1qJmyiXVzcmzcfreSdDC1cV0Hr4iVsQcA99On-0NPOck/export?format=csv"
 
-# --- ✅ Fungsi Baca Data ---
 def load_data():
     df = pd.read_csv(sheet_url)
     df.columns = df.columns.str.strip()
@@ -62,15 +58,14 @@ def load_data():
 
 df = load_data()
 
-# --- ✅ Notifikasi Kotak Khas ---
 today = datetime.date.today()
 program_hari_ini = df[df['Tarikh'].dt.date == today]
 
 if not program_hari_ini.empty:
-    aktiviti_list = program_hari_ini['Aktiviti'].tolist()
-    senarai_program = "<ul>" + "".join(f"<li>{aktiviti}</li>" for aktiviti in aktiviti_list) + "</ul>"
-
-
+    aktiviti_tempat_list = program_hari_ini[['Aktiviti', 'Tempat']].values.tolist()
+    senarai_program = "<ul>" + "".join(
+        f"<li><b>{aktiviti}</b><br><small>📍 {tempat}</small></li>" for aktiviti, tempat in aktiviti_tempat_list
+    ) + "</ul>"
     st.markdown(
         f"""
         <div style="background-color:#004d2a; padding:20px; border-radius:10px; border-left:8px solid #ffffff">
@@ -81,20 +76,21 @@ if not program_hari_ini.empty:
         unsafe_allow_html=True
     )
 
-    if len(aktiviti_list) == 1:
-        st.toast(f"📢 Program Hari Ini: {aktiviti_list[0]}", icon="📌")
+    if len(aktiviti_tempat_list) == 1:
+        st.toast(f"📢 Program Hari Ini: {aktiviti_tempat_list[0][0]}", icon="📌")
     else:
-        st.toast(f"📢 {len(aktiviti_list)} Program Hari Ini!", icon="📌")
-        for aktiviti in aktiviti_list:
+        st.toast(f"📢 {len(aktiviti_tempat_list)} Program Hari Ini!", icon="📌")
+        for aktiviti, _ in aktiviti_tempat_list:
             st.toast(f"📌 {aktiviti}")
 
-# --- ✅ Statistik Ringkas ---
 jumlah_program = len(df)
-program_hari_ini = df[df['Tarikh'].dt.date == today]
 jumlah_program_hari_ini = len(program_hari_ini)
 jumlah_program_akan_datang = len(df[df['Tarikh'].dt.date > today])
 
-tahun_list = sorted([int(t) for t in df['Tahun'].dropna().unique() if 2025 <= t <= 2027], reverse=True)
+tahun_list = sorted(
+    [int(t) for t in df['Tahun'].dropna().unique() if 2025 <= t <= 2027],
+    reverse=True
+)
 tahun_dipilih = st.selectbox("Pilih Tahun", tahun_list)
 
 jumlah_program_tahun_ini = len(df[df['Tahun'] == tahun_dipilih])
@@ -107,9 +103,11 @@ col3.metric("Akan Datang", jumlah_program_akan_datang)
 col4.metric(f"Program {tahun_dipilih}", jumlah_program_tahun_ini)
 col5.metric("Program Selesai", jumlah_program_selesai)
 
-bulan_penuh = [("Januari", 1), ("Februari", 2), ("Mac", 3), ("April", 4),
-               ("Mei", 5), ("Jun", 6), ("Julai", 7), ("Ogos", 8),
-               ("September", 9), ("Oktober", 10), ("November", 11), ("Disember", 12)]
+bulan_penuh = [
+    ('Januari', 1), ('Februari', 2), ('Mac', 3), ('April', 4),
+    ('Mei', 5), ('Jun', 6), ('Julai', 7), ('Ogos', 8),
+    ('September', 9), ('Oktober', 10), ('November', 11), ('Disember', 12)
+]
 
 bulan_nama_list = [b[0] for b in bulan_penuh]
 bulan_nombor_list = [b[1] for b in bulan_penuh]
