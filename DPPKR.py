@@ -71,7 +71,7 @@ st.markdown("""
 st.markdown("""
     <style>
     .box-container {
-        background-color: black;
+        background-color: white;
         color: black;
         padding: 20px;
         border-radius: 20px;
