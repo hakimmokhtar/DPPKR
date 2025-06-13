@@ -74,6 +74,8 @@ df = load_data()
 
 # --- ✅ Statistik Ringkas ---
 jumlah_program = len(df)
+program_hari_ini = df[df['Tarikh'].dt.date == datetime.date.today()]
+jumlah_program_hari_ini = len(program_hari_ini)
 jumlah_program_akan_datang = len(df[df['Tarikh'].dt.date > datetime.date.today()])
 
 # --- ✅ Dropdown Tahun ---
@@ -88,11 +90,12 @@ jumlah_program_selesai = len(df[df['Tarikh'].dt.date < datetime.date.today()])
 
 # --- ✅ Statistik Paparan ---
 
-col1, col2, col3, col4, = st.columns(4)
+col1, col2, col3, col4, col5 = st.columns(5)
 col1.metric("Jumlah Program", jumlah_program)
-col2.metric("Akan Datang", jumlah_program_akan_datang)
-col3.metric(f"Program {tahun_dipilih}", jumlah_program_tahun_ini)
-col4.metric("Program Selesai", jumlah_program_selesai)
+col2.metric("Program Hari Ini", jumlah_program_hari_ini)
+col3.metric("Akan Datang", jumlah_program_akan_datang)
+col4.metric(f"Program {tahun_dipilih}", jumlah_program_tahun_ini)
+col5.metric("Program Selesai", jumlah_program_selesai)
 
 # --- ✅ Senarai Bulan Penuh (Jan - Dec) ---
 bulan_penuh = [
@@ -129,7 +132,7 @@ else:
 
 # --- ✅ Program Akan Datang ---
 
-st.markdown("## 📅 Program Yang Terdekat")
+st.markdown("## 📅 Program Akan Datang")
 df_akan_datang = df[df['Tarikh'].dt.date > datetime.date.today()].sort_values('Tarikh').head(3)
 
 if df_akan_datang.empty:
