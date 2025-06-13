@@ -31,16 +31,19 @@ st.markdown("""
         background-color: #004d2a !important;
         color: white !important;
     }
+
+    /* ✅ UPDATE WARNA TULISAN JADUAL */
     .dataframe th {
-        background-color: #004d2a !important;
-        color: white !important;
+        background-color: #cce5cc !important;
+        color: black !important;
     }
     .dataframe td {
-        color: white !important;
-        background-color: #006e3c !important;
+        background-color: #e6f2e6 !important;
+        color: black !important;
     }
     </style>
 """, unsafe_allow_html=True)
+
 
 st.image("LOGO DPPM.png", width=700)
 
