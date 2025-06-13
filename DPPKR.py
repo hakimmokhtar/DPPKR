@@ -120,9 +120,7 @@ with st.container():
 
     if col2.button(f"📌 Program Hari Ini\n({jumlah_program_hari_ini})"):
         with st.expander("📋 Senarai Program Hari Ini", expanded=True):
-            if program_hari_ini.empty:
-            st.info("❌ Tiada program hari ini.")
-        else:
+
             df_papar = program_hari_ini[['Tarikh', 'Aktiviti', 'Tempat']].copy()
             df_papar['Tarikh'] = df_papar['Tarikh'].dt.strftime('%d %b %Y')
             df_papar.reset_index(drop=True, inplace=True)
