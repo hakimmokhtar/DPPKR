@@ -17,33 +17,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-st.markdown("""
-    <style>
-    .stApp, .stMarkdown, .stSelectbox label, .stDateInput label,
-    .stDataFrame, .stMetric, .stTextInput, .stButton, .stNumberInput label {
-        color: white !important;
-    }
-    h1, h2, h3, h4, h5, h6 {
-        color: white !important;
-    }
-    .css-1d391kg { color: white !important; }
-    .stSelectbox div[data-baseweb="select"],
-    .stDateInput input {
-        background-color: #004d2a !important;
-        color: white !important;
-    }
 
-    /* ✅ UPDATE WARNA TULISAN JADUAL */
-    .dataframe th {
-        background-color: #cce5cc !important;
-        color: black !important;
-    }
-    .dataframe td {
-        background-color: #e6f2e6 !important;
-        color: black !important;
-    }
-    </style>
-""", unsafe_allow_html=True)
 
 st.markdown("""
     <style>
