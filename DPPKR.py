@@ -1,7 +1,8 @@
 import streamlit as st
 import pandas as pd
 import datetime
-from urllib.parse import quote
+from urllib.parse 
+import quote
 
 # --- ✅ CSS Custom ---
 st.markdown("""
