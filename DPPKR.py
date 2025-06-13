@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import datetime
-import urllib.parse
+from urllib.parse import quote
 
 # --- ✅ Background Hijau PAS ---
 st.markdown(
@@ -63,8 +63,13 @@ today = datetime.date.today()
 program_hari_ini = df[df['Tarikh'].dt.date == today]
 
 if not program_hari_ini.empty:
-    aktiviti_list = program_hari_ini[['Aktiviti', 'Tempat']].values.tolist()
-    senarai_program = "<ul>" + "".join(f"<li>{aktiviti} - {tempat}</li>" for aktiviti, tempat in aktiviti_list) + "</ul>"
+    aktiviti_list = program_hari_ini['Aktiviti'].tolist()
+    tempat_list = program_hari_ini['Tempat'].tolist()
+
+    senarai_program = "<ul>" + "".join(
+        f"<li>{aktiviti} - {tempat}</li>" for aktiviti, tempat in zip(aktiviti_list, tempat_list)
+    ) + "</ul>"
+
     st.markdown(
         f"""
         <div style="background-color:#004d2a; padding:20px; border-radius:10px; border-left:8px solid #ffffff">
@@ -76,16 +81,22 @@ if not program_hari_ini.empty:
     )
 
     if len(aktiviti_list) == 1:
-        st.toast(f"📢 Program Hari Ini: {aktiviti_list[0][0]} di {aktiviti_list[0][1]}", icon="📌")
+        st.toast(f"📢 Program Hari Ini: {aktiviti_list[0]}", icon="📌")
     else:
         st.toast(f"📢 {len(aktiviti_list)} Program Hari Ini!", icon="📌")
-        for aktiviti, tempat in aktiviti_list:
-            st.toast(f"📌 {aktiviti} di {tempat}")
+        for aktiviti in aktiviti_list:
+            st.toast(f"📌 {aktiviti}")
+
+    mesej_wa = f"*Program Hari Ini ({today.strftime('%A, %d %B %Y')})*\n"
+    for aktiviti, tempat in zip(aktiviti_list, tempat_list):
+        mesej_wa += f"📌 {aktiviti}\n📍 {tempat}\n\n"
+
+    pautan_wa = f"https://wa.me/?text={quote(mesej_wa)}"
+    st.markdown(f"[📤 Kongsi ke WhatsApp]({pautan_wa})", unsafe_allow_html=True)
 
 jumlah_program = len(df)
-program_hari_ini = df[df['Tarikh'].dt.date == datetime.date.today()]
 jumlah_program_hari_ini = len(program_hari_ini)
-jumlah_program_akan_datang = len(df[df['Tarikh'].dt.date > datetime.date.today()])
+jumlah_program_akan_datang = len(df[df['Tarikh'].dt.date > today])
 
 tahun_list = sorted(
     [int(t) for t in df['Tahun'].dropna().unique() if 2025 <= t <= 2027],
@@ -94,7 +105,7 @@ tahun_list = sorted(
 tahun_dipilih = st.selectbox("Pilih Tahun", tahun_list)
 
 jumlah_program_tahun_ini = len(df[df['Tahun'] == tahun_dipilih])
-jumlah_program_selesai = len(df[df['Tarikh'].dt.date < datetime.date.today()])
+jumlah_program_selesai = len(df[df['Tarikh'].dt.date < today])
 
 col1, col2, col3, col4, col5 = st.columns(5)
 col1.metric("Jumlah Program", jumlah_program)
@@ -117,7 +128,6 @@ bulan_dipilih_index = bulan_nama_list.index(bulan_dipilih_nama)
 bulan_dipilih_num = bulan_nombor_list[bulan_dipilih_index]
 
 df['BulanNum'] = df['Tarikh'].dt.month
-
 df_tapis = df[(df['Tahun'] == tahun_dipilih) & (df['BulanNum'] == bulan_dipilih_num)]
 
 st.markdown(f"## 📌 Jadual Aktiviti Bulan {bulan_dipilih_nama} {tahun_dipilih}")
@@ -132,36 +142,20 @@ else:
     df_papar.index.name = 'Bil'
     st.dataframe(df_papar, use_container_width=True)
 
-# --- ✅ Program Akan Datang ---
-
 st.markdown("## 📅 Program Yang Terdekat")
-df_akan_datang = df[df['Tarikh'].dt.date >= datetime.date.today()].sort_values('Tarikh').head(3)
+df_akan_datang = df[df['Tarikh'].dt.date >= today].sort_values('Tarikh').head(3)
 
 if df_akan_datang.empty:
     st.info("❌ Tiada program akan datang setakat ini.")
 else:
-    for i, row in df_akan_datang.iterrows():
-        tarikh_str = row['Tarikh'].strftime('%A, %d %B %Y')
-        aktiviti = row['Aktiviti']
-        tempat = row['Tempat']
+    df_prog_akan_datang = df_akan_datang[['Tarikh', 'Aktiviti', 'Tempat']].copy()
+    df_prog_akan_datang['Tarikh'] = df_prog_akan_datang['Tarikh'].dt.strftime('%A, %d %B %Y')
+    df_prog_akan_datang.reset_index(drop=True, inplace=True)
+    df_prog_akan_datang.index += 1
+    df_prog_akan_datang.index.name = 'Bil'
+    st.dataframe(df_prog_akan_datang, use_container_width=True)
 
-        st.markdown(
-            f"""
-            <div style="background-color:#004d2a; padding:15px; border-radius:10px; margin-bottom:10px;">
-                <h5 style="color:white;">📌 {aktiviti}</h5>
-                <p style="margin:0;"><b>📅 Tarikh:</b> {tarikh_str}</p>
-                <p style="margin:0;"><b>📍 Tempat:</b> {tempat}</p>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-
-        msg = f"📢 {aktiviti}\n📅 {tarikh_str}\n📍 {tempat}"
-        encoded_msg = urllib.parse.quote(msg)
-        whatsapp_url = f"https://wa.me/?text={encoded_msg}"
-        st.markdown(f"[🟢 Kongsi ke WhatsApp]({whatsapp_url})", unsafe_allow_html=True)
-
-tarikh_dicari = st.date_input("📆 Pilih Tarikh Untuk Lihat Program", datetime.date.today())
+tarikh_dicari = st.date_input("📆 Pilih Tarikh Untuk Lihat Program", today)
 df_tarikh_dicari = df[df['Tarikh'].dt.date == tarikh_dicari]
 
 st.markdown(f"## 🔍 Program Pada {tarikh_dicari.strftime('%A, %d %B %Y')}")
